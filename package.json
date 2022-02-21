@@ -1,6 +1,6 @@
 {
   "name": "eqemu",
-  "productName": "eqemu",
+  "productName": "EQEMU",
   "version": "0.1.0",
   "description": "An Electron-based frontend for QEMU",
   "main": ".webpack/main",
