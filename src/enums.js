@@ -20,3 +20,9 @@ export const BOOT_OPTIONS = Object.freeze([
     { text: 'Hard drive', value: 'c' },
     { text: 'Network', value: 'n' },
 ]);
+
+export const SHELL_NEW_LINE_DELIMETERS = Object.freeze([
+    { text: 'cmd', value: '^' },
+    { text: 'PowerShell', value: '`' },
+    { text: 'bash', value: '\\' },
+]);

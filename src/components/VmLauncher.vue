@@ -5,47 +5,23 @@
         <p class="launcher-shell-selector-title">
           Generated shell script
         </p>
-        <div class="form-check form-check-inline">
+        <div
+          v-for="delimeterOption in delimeterOptions"
+          :key="delimeterOption.value"
+          class="form-check form-check-inline"
+        >
           <input
-            id="inlineRadio1"
-            v-model="shell"
+            :id="'delimeterOption' + delimeterOption.value"
+            v-model="delimeter"
             class="form-check-input"
             type="radio"
-            name="shell"
-            value="cmd"
+            name="delimeter"
+            :value="delimeterOption.value"
           >
           <label
             class="form-check-label"
-            for="inlineRadio1"
-          >cmd</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            id="inlineRadio2"
-            v-model="shell"
-            class="form-check-input"
-            type="radio"
-            name="shell"
-            value="powershell"
-          >
-          <label
-            class="form-check-label"
-            for="inlineRadio2"
-          >PowerShell</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            id="inlineRadio3"
-            v-model="shell"
-            class="form-check-input"
-            type="radio"
-            name="shell"
-            value="bash"
-          >
-          <label
-            class="form-check-label"
-            for="inlineRadio3"
-          >bash</label>
+            :for="'delimeterOption' + delimeterOption.value"
+          >{{ delimeterOption.text }}</label>
         </div>
       </div>
       <div class="launcher-script">
@@ -72,11 +48,14 @@
 </template>
 
 <script>
+import { SHELL_NEW_LINE_DELIMETERS } from '../enums';
+
 export default {
     name: 'VmLauncher',
     data() {
         return {
-            shell: 'cmd'
+            delimeterOptions: SHELL_NEW_LINE_DELIMETERS,
+            delimeter: SHELL_NEW_LINE_DELIMETERS[0].value,
         };
     },
     computed: {
@@ -111,15 +90,9 @@ export default {
             ];
         },
         cmdLine() {
-            const delimeters = {
-                'cmd': '^',
-                'powershell': '`',
-                'bash': '\\',
-            };
-
             return this.cmdArgs
                 .filter((arg) => arg.trim().length > 0)
-                .join(` ${delimeters[this.shell]}\n`);
+                .join(` ${this.delimeter}\n`);
         },
     },
     methods: {
