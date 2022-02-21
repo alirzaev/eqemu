@@ -94,7 +94,7 @@ export default {
                 config.cdrom.path ? `-cdrom "${config.cdrom.path}"` : '',
                 config.drive.path ? `-drive "file=${config.drive.path},format=qcow2"` : '',
                 `-vga ${config.graphics.card}`,
-                `-boot ${config.bootDevice}`,
+                `-boot order=${config.bootDevice},menu=on`,
                 config.networking.enabled ? '-net nic,model=e1000 -net user' : '',
                 config.audio.enabled ? '-soundhw hda': '',
                 '-usbdevice tablet',
