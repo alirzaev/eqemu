@@ -1,0 +1,19 @@
+html {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+}
+
+#app {
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+}

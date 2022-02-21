@@ -1,0 +1,91 @@
+{
+  "name": "eqemu",
+  "productName": "eqemu",
+  "version": "0.1.0",
+  "description": "An Electron-based frontend for QEMU",
+  "main": ".webpack/main",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --fix --ext .js,.vue src"
+  },
+  "keywords": [],
+  "author": {
+    "name": "AliRzaev",
+    "email": "alirzaev1996@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "eqemu"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ],
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack.main.config.js",
+            "renderer": {
+              "config": "./webpack.renderer.config.js",
+              "entryPoints": [
+                {
+                  "html": "./src/index.html",
+                  "js": "./src/renderer.js",
+                  "name": "main_window",
+                  "preload": {
+                    "js": "./src/preload.js"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.63",
+    "@vercel/webpack-asset-relocator-loader": "1.7.0",
+    "css-loader": "^6.0.0",
+    "electron": "17.0.1",
+    "eslint": "^8.9.0",
+    "eslint-plugin-vue": "^8.4.1",
+    "node-loader": "^2.0.0",
+    "style-loader": "^3.0.0",
+    "vue-loader": "^17.0.0",
+    "vue-template-compiler": "^2.6.14"
+  },
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "vue": "^3.2.31",
+    "vuex": "^4.0.2"
+  }
+}

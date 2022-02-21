@@ -1,0 +1,165 @@
+<template>
+  <div>
+    <div class="mb-3">
+      <div class="form-check form-check-inline">
+        <input
+          id="inlineRadio1"
+          v-model="shell"
+          class="form-check-input"
+          type="radio"
+          name="shell"
+          value="cmd"
+        >
+        <label
+          class="form-check-label"
+          for="inlineRadio1"
+        >cmd</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input
+          id="inlineRadio2"
+          v-model="shell"
+          class="form-check-input"
+          type="radio"
+          name="shell"
+          value="powershell"
+        >
+        <label
+          class="form-check-label"
+          for="inlineRadio2"
+        >PowerShell</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input
+          id="inlineRadio3"
+          v-model="shell"
+          class="form-check-input"
+          type="radio"
+          name="shell"
+          value="bash"
+        >
+        <label
+          class="form-check-label"
+          for="inlineRadio3"
+        >bash</label>
+      </div>
+    </div>
+    <div class="script mb-3">
+      <code>{{ cmdLine }}</code>
+      <button
+        type="button"
+        class="btn btn-outline-primary btn-sm btn-clipboard"
+        @click="copyScriptToClipboard"
+      >
+        Copy
+      </button>
+    </div>
+    <div class="panel mb-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        @click="launchVm"
+      >
+        Launch VM
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+    name: 'VmLauncher',
+    data() {
+        return {
+            shell: 'cmd'
+        };
+    },
+    computed: {
+        config() {
+            return this.$store.state.vm.config;
+        },
+        cmdArgs() {
+            const config = this.config;
+
+            return [
+                'qemu-system-x86_64',
+                `-accel ${config.acceleration}`,
+                `-smp ${config.cpu.cores}`,
+                `-m ${config.memory}G`,
+                config.cdrom.path ? `-cdrom "${config.cdrom.path}"` : '',
+                config.drive.path ? `-drive "file=${config.drive.path},format=qcow2"` : '',
+                `-vga ${config.graphics.card}`,
+                `-boot ${config.bootDevice}`,
+                config.networking.enabled ? '-net nic,model=e1000 -net user' : '',
+                config.audio.enabled ? '-soundhw hda': '',
+                '-usbdevice tablet',
+                ...(config.spiceAgent.enabled
+                    ? [
+                        '-device virtio-serial',
+                        '-chardev spicevmc,id=vdagent,debug=0,name=vdagent',
+                        '-device virtserialport,chardev=vdagent,name=com.redhat.spice.0',
+                    ]
+                    : []),
+                config.spiceServer.enabled
+                    ? `-spice port=${config.spiceServer.port},password=${config.spiceServer.password}`
+                    : '',
+            ];
+        },
+        cmdLine() {
+            const delimeters = {
+                'cmd': '^',
+                'powershell': '`',
+                'bash': '\\',
+            };
+
+            return this.cmdArgs
+                .filter((arg) => arg.trim().length > 0)
+                .join(` ${delimeters[this.shell]}\n`);
+        },
+    },
+    methods: {
+        copyScriptToClipboard() {
+            navigator.clipboard.writeText(this.cmdLine);
+        },
+        launchVm() {
+            const args = JSON.parse(JSON.stringify(this.cmdArgs));
+
+            electron.vmManager.launchVm(args.slice(1)); // eslint-disable-line
+        },
+    },
+};
+</script>
+
+<style>
+.script {
+  position: relative;
+  display: flex;
+}
+
+.script code {
+  padding-right: 50px;
+  white-space: pre;
+  overflow: auto;
+  width: 100%;
+}
+
+.btn-clipboard {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 10;
+  display: block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.65em;
+  color: #0d6efd;
+  background-color: #fff;
+  border: 1px solid;
+  border-radius: 0.25rem;
+}
+
+.panel {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+</style>
