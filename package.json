@@ -5,7 +5,7 @@
   "description": "An Electron-based frontend for QEMU",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "cross-env NODE_ENV=development electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -73,6 +73,7 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
     "@electron-forge/plugin-webpack": "6.0.0-beta.63",
     "@vercel/webpack-asset-relocator-loader": "1.7.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.0.0",
     "electron": "17.0.1",
     "eslint": "^8.9.0",

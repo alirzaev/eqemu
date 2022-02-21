@@ -25,8 +25,10 @@ const createWindow = () => {
     // and load the index.html of the app.
     mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY); // eslint-disable-line no-undef
 
+    if (process.env.NODE_ENV === 'development') {
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
+    }
 
     const menu = createApplicationMenu(async () => {
         const path = await dialog.showOpenDialog({
