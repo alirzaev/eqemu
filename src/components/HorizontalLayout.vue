@@ -1,0 +1,34 @@
+<template>
+  <div
+    class="horizontal-layout"
+    :class="{ 'horizontal-layout-even': even }"
+  >
+    <slot />
+  </div>
+</template>
+
+<script>
+export default {
+    name: 'HorizontalLayout',
+    props: {
+        even: Boolean,
+    },
+};
+</script>
+
+<style>
+.horizontal-layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.horizontal-layout-even > * {
+  flex-grow: 1;
+  padding: 0;
+  width: 100%;
+}
+</style>

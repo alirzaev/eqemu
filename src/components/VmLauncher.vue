@@ -1,67 +1,72 @@
 <template>
-  <div>
-    <div class="mb-3">
-      <div class="form-check form-check-inline">
-        <input
-          id="inlineRadio1"
-          v-model="shell"
-          class="form-check-input"
-          type="radio"
-          name="shell"
-          value="cmd"
-        >
-        <label
-          class="form-check-label"
-          for="inlineRadio1"
-        >cmd</label>
+  <div class="launcher">
+    <div class="launcher-inner">
+      <div class="launcher-shell-selector">
+        <p class="launcher-shell-selector-title">
+          Generated shell script
+        </p>
+        <div class="form-check form-check-inline">
+          <input
+            id="inlineRadio1"
+            v-model="shell"
+            class="form-check-input"
+            type="radio"
+            name="shell"
+            value="cmd"
+          >
+          <label
+            class="form-check-label"
+            for="inlineRadio1"
+          >cmd</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            id="inlineRadio2"
+            v-model="shell"
+            class="form-check-input"
+            type="radio"
+            name="shell"
+            value="powershell"
+          >
+          <label
+            class="form-check-label"
+            for="inlineRadio2"
+          >PowerShell</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            id="inlineRadio3"
+            v-model="shell"
+            class="form-check-input"
+            type="radio"
+            name="shell"
+            value="bash"
+          >
+          <label
+            class="form-check-label"
+            for="inlineRadio3"
+          >bash</label>
+        </div>
       </div>
-      <div class="form-check form-check-inline">
-        <input
-          id="inlineRadio2"
-          v-model="shell"
-          class="form-check-input"
-          type="radio"
-          name="shell"
-          value="powershell"
+      <div class="launcher-script">
+        <code>{{ cmdLine }}</code>
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm launcher-script-btn-clipboard"
+          @click="copyScriptToClipboard"
         >
-        <label
-          class="form-check-label"
-          for="inlineRadio2"
-        >PowerShell</label>
+          Copy
+        </button>
       </div>
-      <div class="form-check form-check-inline">
-        <input
-          id="inlineRadio3"
-          v-model="shell"
-          class="form-check-input"
-          type="radio"
-          name="shell"
-          value="bash"
+      <div class="launcher-panel">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="launchVm"
         >
-        <label
-          class="form-check-label"
-          for="inlineRadio3"
-        >bash</label>
+          Launch VM
+        </button>
       </div>
-    </div>
-    <div class="script mb-3">
-      <code>{{ cmdLine }}</code>
-      <button
-        type="button"
-        class="btn btn-outline-primary btn-sm btn-clipboard"
-        @click="copyScriptToClipboard"
-      >
-        Copy
-      </button>
-    </div>
-    <div class="panel mb-3">
-      <button
-        type="button"
-        class="btn btn-primary"
-        @click="launchVm"
-      >
-        Launch VM
-      </button>
     </div>
   </div>
 </template>
@@ -131,24 +136,49 @@ export default {
 </script>
 
 <style>
-.script {
+.launcher {
   position: relative;
-  display: flex;
+  height: 100%;
 }
 
-.script code {
-  padding-right: 50px;
+.launcher-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  height: 100%;
+  overflow: hidden;
+}
+
+.launcher-shell-selector-title {
+  margin-bottom: 0.5rem;
+}
+
+.launcher-script {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.launcher-script code {
   white-space: pre;
   overflow: auto;
   width: 100%;
 }
 
-.btn-clipboard {
+.launcher-script-btn-clipboard {
   position: absolute;
   top: 0.65rem;
   right: 0.65rem;
   z-index: 10;
   display: block;
+  opacity: 0.5;
   padding: 0.25rem 0.5rem;
   font-size: 0.65em;
   color: #0d6efd;
@@ -157,9 +187,13 @@ export default {
   border-radius: 0.25rem;
 }
 
-.panel {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
+.launcher-script-btn-clipboard:hover {
+  opacity: 1;
+}
+
+.launcher-panel {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
 }
 </style>

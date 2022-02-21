@@ -1,17 +1,19 @@
 <template>
-  <div class="form-check">
-    <input
-      id="networkingEnabled"
-      v-model="networkingEnabled"
-      class="form-check-input"
-      type="checkbox"
-    >
-    <label
-      class="form-check-label"
-      for="networkingEnabled"
-    >
-      Enable networking
-    </label>
+  <div>
+    <div class="form-check">
+      <input
+        id="networkingEnabled"
+        v-model="networkingEnabled"
+        class="form-check-input"
+        type="checkbox"
+      >
+      <label
+        class="form-check-label"
+        for="networkingEnabled"
+      >
+        Enable networking
+      </label>
+    </div>
   </div>
 </template>
 

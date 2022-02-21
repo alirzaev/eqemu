@@ -1,17 +1,20 @@
 <template>
-  <div class="form-check">
-    <input
-      id="spiceAgentEnabled"
-      v-model="spiceAgentEnabled"
-      class="form-check-input"
-      type="checkbox"
-    >
-    <label
-      class="form-check-label"
-      for="spiceAgentEnabled"
-    >
-      Enable SPICE agent
-    </label>
+  <div>
+    <div class="form-check">
+      <input
+        id="spiceAgentEnabled"
+        v-model="spiceAgentEnabled"
+        class="form-check-input"
+        type="checkbox"
+      >
+      <label
+        class="form-check-label"
+        for="spiceAgentEnabled"
+      >
+        Enable SPICE agent
+      </label>
+    </div>
+    <div />
   </div>
 </template>
 

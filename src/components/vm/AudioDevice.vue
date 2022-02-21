@@ -1,17 +1,19 @@
 <template>
-  <div class="form-check">
-    <input
-      id="audioEnabled"
-      v-model="audioEnabled"
-      class="form-check-input"
-      type="checkbox"
-    >
-    <label
-      class="form-check-label"
-      for="audioEnabled"
-    >
-      Enable audio device
-    </label>
+  <div>
+    <div class="form-check">
+      <input
+        id="audioEnabled"
+        v-model="audioEnabled"
+        class="form-check-input"
+        type="checkbox"
+      >
+      <label
+        class="form-check-label"
+        for="audioEnabled"
+      >
+        Enable audio device
+      </label>
+    </div>
   </div>
 </template>
 

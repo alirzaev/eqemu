@@ -14,11 +14,11 @@
         Enable SPICE server
       </label>
     </div>
-    <div
-      v-if="enabled"
-      class="row justify-content-center"
+    <HorizontalLayout
+      v-if="spiceServerEnabled"
+      :even="true"
     >
-      <div class="col-6">
+      <div>
         <label
           for="spiceServerPort"
           class="form-label"
@@ -32,7 +32,7 @@
           max="65535"
         >
       </div>
-      <div class="col-6">
+      <div>
         <label
           for="spiceServerPassword"
           class="form-label"
@@ -44,14 +44,22 @@
           type="text"
         >
       </div>
-    </div>
+    </HorizontalLayout>
   </div>
 </template>
 
 <script>
+import HorizontalLayout from '../HorizontalLayout.vue';
+
 export default {
     name: 'SpiceServer',
+    components: {
+        HorizontalLayout,
+    },
     computed: {
+        spiceServer() {
+            return this.$store.state.vm.config.spiceServer;
+        },
         spiceServerEnabled: {
             get() {
                 return this.$store.state.vm.config.spiceServer.enabled;
@@ -59,6 +67,7 @@ export default {
             set(value) {
                 this.$store.commit('vm/patchConfig', {
                     spiceServer: {
+                        ...this.spiceServer,
                         enabled: value,
                     },
                 });
@@ -71,6 +80,7 @@ export default {
             set(value) {
                 this.$store.commit('vm/patchConfig', {
                     spiceServer: {
+                        ...this.spiceServer,
                         port: value,
                     },
                 });
@@ -83,6 +93,7 @@ export default {
             set(value) {
                 this.$store.commit('vm/patchConfig', {
                     spiceServer: {
+                        ...this.spiceServer,
                         password: value,
                     },
                 });

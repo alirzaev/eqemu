@@ -1,79 +1,21 @@
 <template>
-  <div class="app row justify-content-center">
-    <form class="col-12 col-md-6">
-      <div class="mb-3 row justify-content-center">
-        <div class="col">
-          <AccelerationSettings />
-        </div>
-        <div class="col">
-          <Cpu />
-        </div>
-        <div class="col">
-          <Ram />
-        </div>
-      </div>
-      <div class="mb-3">
-        <OpticalDrive />
-      </div>
-      <div class="mb-3">
-        <HardDrive />
-      </div>
-      <div class="mb-3 row justify-content-center">
-        <div class="col-6">
-          <BootDevice />
-        </div>
-        <div class="col-6">
-          <GraphicsCard />
-        </div>
-      </div>
-      <div class="mb-3 row justify-content-center">
-        <div class="col-6">
-          <AudioDevice />
-        </div>
-        <div class="col-6">
-          <NetworkSettings />
-        </div>
-      </div>
-      <div class="mb-3">
-        <SpiceAgent />
-      </div>
-      <div class="mb-3">
-        <SpiceServer />
-      </div>
-    </form>
-    <div class="col-12 col-md-6">
+  <div class="app">
+    <div class="app-vm-config-wrapper">
+      <VmConfig />
+    </div>
+    <div class="app-launcher-wrapper">
       <VmLauncher />
     </div>
   </div>
 </template>
 
 <script>
-import AccelerationSettings from './vm/AccelerationSettings.vue';
-import AudioDevice from './vm/AudioDevice.vue';
-import BootDevice from './vm/BootDevice.vue';
-import CPU from './vm/CPU.vue';
-import GraphicsCard from './vm/GraphicsCard.vue';
-import HardDrive from './vm/HardDrive.vue';
-import NetworkSettings from './vm/NetworkSettings.vue';
-import OpticalDrive from './vm/OpticalDrive.vue';
-import RAM from './vm/RAM.vue';
-import SpiceAgent from './vm/SpiceAgent.vue';
-import SpiceServer from './vm/SpiceServer.vue';
+import VmConfig from './VmConfig.vue';
 import VmLauncher from './VmLauncher.vue';
 
 export default {
     components: {
-        AccelerationSettings,
-        AudioDevice,
-        BootDevice,
-        Cpu: CPU,
-        GraphicsCard,
-        HardDrive,
-        NetworkSettings,
-        OpticalDrive,
-        Ram: RAM,
-        SpiceAgent,
-        SpiceServer,
+        VmConfig,
         VmLauncher,
     },
     computed: {
@@ -111,6 +53,20 @@ export default {
 
 <style>
 .app {
-  margin: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.app-launcher-wrapper,
+.app-vm-config-wrapper {
+  flex-grow: 1;
+  padding: 0;
+  width: 100%;
 }
 </style>
