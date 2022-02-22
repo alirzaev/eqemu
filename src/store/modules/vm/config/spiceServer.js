@@ -4,6 +4,8 @@ export const VmSpiceServer = {
         enabled: false,
         port: 3000,
         password: 'password',
+        ticketing: false,
+        usbRedirection: false,
     }),
     mutations: {
         load: (state, obj) => {
@@ -19,6 +21,12 @@ export const VmSpiceServer = {
         },
         setPassword: (state, password) => {
             state.password = password;
+        },
+        setTicketing: (state, ticketing) => {
+            state.ticketing = ticketing;
+        },
+        setUsbRedirection: (state, usbRedirection) => {
+            state.usbRedirection = usbRedirection;
         },
     },
 };
