@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { ACCELERATORS } from '../../enums';
+import { ACCELERATORS } from '@/enums';
 
 export default {
     name: 'AccelerationSettings',
@@ -36,7 +36,7 @@ export default {
                 return this.$store.state.vm.config.acceleration;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     acceleration: value,
                 });
             },

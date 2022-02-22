@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { BOOT_OPTIONS } from '../../enums';
+import { BOOT_OPTIONS } from '@/enums';
 
 export default {
     name: 'BootDevice',
@@ -36,7 +36,7 @@ export default {
                 return this.$store.state.vm.config.bootDevice;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     bootDevice: value,
                 });
             },

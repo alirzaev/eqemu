@@ -59,40 +59,11 @@ export default {
         };
     },
     computed: {
-        config() {
-            return this.$store.state.vm.config;
-        },
         cmdArgs() {
-            const config = this.config;
-
-            return [
-                'qemu-system-x86_64',
-                `-accel ${config.acceleration}`,
-                `-smp ${config.cpu.cores}`,
-                `-m ${config.memory}G`,
-                config.cdrom.path ? `-cdrom "${config.cdrom.path}"` : '',
-                config.drive.path ? `-drive "file=${config.drive.path},format=qcow2"` : '',
-                `-vga ${config.graphics.card}`,
-                `-boot order=${config.bootDevice},menu=on`,
-                config.networking.enabled ? '-net nic,model=e1000 -net user' : '',
-                config.audio.enabled ? '-soundhw hda': '',
-                '-usbdevice tablet',
-                ...(config.spiceAgent.enabled
-                    ? [
-                        '-device virtio-serial',
-                        '-chardev spicevmc,id=vdagent,debug=0,name=vdagent',
-                        '-device virtserialport,chardev=vdagent,name=com.redhat.spice.0',
-                    ]
-                    : []),
-                config.spiceServer.enabled
-                    ? `-spice port=${config.spiceServer.port},password=${config.spiceServer.password}`
-                    : '',
-            ];
+            return this.$store.getters['vm/params'];
         },
         cmdLine() {
-            return this.cmdArgs
-                .filter((arg) => arg.trim().length > 0)
-                .join(` ${this.delimeter}\n`);
+            return this.cmdArgs.join(` ${this.delimeter}\n`);
         },
     },
     methods: {

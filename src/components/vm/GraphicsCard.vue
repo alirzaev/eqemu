@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { GRAPHICS_CARDS } from '../../enums';
+import { GRAPHICS_CARDS } from '@/enums';
 
 export default {
     name: 'GraphicsCard',
@@ -36,7 +36,7 @@ export default {
                 return this.$store.state.vm.config.graphics.card;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     graphics: {
                         card: value,
                     },

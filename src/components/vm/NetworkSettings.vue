@@ -26,7 +26,7 @@ export default {
                 return this.$store.state.vm.config.networking.enabled;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     networking: {
                         enabled: value,
                     },

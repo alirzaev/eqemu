@@ -1,3 +1,4 @@
+const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader');
 
 const rules = require('./webpack.rules');
@@ -17,5 +18,10 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin()
-    ]
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        }
+    },
 };

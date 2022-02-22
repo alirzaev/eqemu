@@ -24,7 +24,7 @@ export default {
                 return this.$store.state.vm.config.cpu.cores;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     cpu: {
                         cores: value,
                     },

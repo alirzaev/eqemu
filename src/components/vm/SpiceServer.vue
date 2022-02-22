@@ -65,12 +65,7 @@ export default {
                 return this.$store.state.vm.config.spiceServer.enabled;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
-                    spiceServer: {
-                        ...this.spiceServer,
-                        enabled: value,
-                    },
-                });
+                this.$store.commit('vm/config/spiceServer/setEnabled', value);
             },
         },
         spiceServerPort: {
@@ -78,12 +73,7 @@ export default {
                 return this.$store.state.vm.config.spiceServer.port;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
-                    spiceServer: {
-                        ...this.spiceServer,
-                        port: value,
-                    },
-                });
+                this.$store.commit('vm/config/spiceServer/setPort', value);
             },
         },
         spiceServerPassword: {
@@ -91,12 +81,7 @@ export default {
                 return this.$store.state.vm.config.spiceServer.password;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
-                    spiceServer: {
-                        ...this.spiceServer,
-                        password: value,
-                    },
-                });
+                this.$store.commit('vm/config/spiceServer/setPassword', value);
             },
         },
     },

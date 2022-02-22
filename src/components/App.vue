@@ -25,27 +25,15 @@ export default {
     },
     created() {
         electron.vmConfig.onRequestConfig(async (event) => { // eslint-disable-line
-            const config = {
-                memory: this.config.memory,
-                cpu: this.config.cpu,
-                drive: this.config.drive,
-                cdrom: this.config.cdrom,
-                acceleration: this.config.acceleration,
-                bootOrder: this.config.bootOrder,
-                graphics: this.config.graphics,
-                audio: this.config.audio,
-                networking: this.config.networking,
-                spiceAgent: this.config.spiceAgent,
-                spiceServer: this.config.spiceServer,
-            };
-
+            const config = this.$store.getters['vm/config/plainObject'];
+            
             event.sender.send('vm:request-config-value', JSON.stringify(config));
         });
 
         electron.vmConfig.onLoadConfig(async (_event, config) => { // eslint-disable-line
             config = JSON.parse(config);
 
-            this.$store.commit('vm/patchConfig', config);
+            this.$store.dispatch('vm/config/load', config);
         });
     },
 };

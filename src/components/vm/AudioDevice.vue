@@ -26,7 +26,7 @@ export default {
                 return this.$store.state.vm.config.audio.enabled;
             },
             set(value) {
-                this.$store.commit('vm/patchConfig', {
+                this.$store.commit('vm/config/patch', {
                     audio: {
                         enabled: value,
                     },
