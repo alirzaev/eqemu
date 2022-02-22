@@ -1,3 +1,4 @@
+const settings = require('electron-settings');
 const { spawn } = require('child_process');
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const { readFile, writeFile } = require('fs/promises');
@@ -120,8 +121,32 @@ ipcMain.handle('vm:request-cdrom-path', async () => {
 });
 
 ipcMain.on('vm:launch', async (_event, args) => {
-    spawn('qemu-system-x86_64', args, {
+    let qemuSystemExecutablePath = await settings.get('qemu.system.path');
+
+    if (!qemuSystemExecutablePath) {
+        await dialog.showMessageBox({
+            title: '',
+            message: 'Please provide the path to \'qemu-system-x86_64\' executable',
+        });
+
+        const path = await dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [
+                { extensions: ['.exe'] }
+            ]
+        });
+        
+        if (!path.canceled) {
+            qemuSystemExecutablePath = path.filePaths[0];
+
+            await settings.set('qemu.system.path', qemuSystemExecutablePath);
+        } else {
+            return;
+        }
+    }
+
+    spawn(`"${qemuSystemExecutablePath}"`, args, {
         detached: true,
         shell: true,
-    });
+    }).unref();
 });
