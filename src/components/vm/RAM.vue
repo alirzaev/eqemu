@@ -11,6 +11,7 @@
         type="number"
         class="form-control"
         min="1"
+        :max="maxMemory"
       >
       <span class="input-group-text">GiB</span>
     </div>
@@ -21,6 +22,9 @@
 export default {
     name: 'RAM',
     computed: {
+        maxMemory() {
+            return this.$store.state.system.memory;
+        },
         memory: {
             get() {
                 return this.$store.state.vm.config.memory;
