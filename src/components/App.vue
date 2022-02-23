@@ -18,11 +18,6 @@ export default {
         VmConfig,
         VmLauncher,
     },
-    computed: {
-        config() {
-            return this.$store.state.vm.config;
-        },
-    },
     created() {
         electron.vmConfig.onRequestConfig(async (event) => { // eslint-disable-line
             const config = this.$store.getters['vm/config/plainObject'];
@@ -35,6 +30,8 @@ export default {
 
             this.$store.dispatch('vm/config/load', config);
         });
+
+        this.$store.dispatch('system/loadInfo');
     },
 };
 </script>

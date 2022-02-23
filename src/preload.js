@@ -20,4 +20,9 @@ contextBridge.exposeInMainWorld('electron', {
             ipcRenderer.send('vm:launch', args);
         },
     },
+    system: {
+        requestInfo() {
+            return ipcRenderer.invoke('system:request-info');
+        },
+    },
 });

@@ -1,4 +1,5 @@
 const settings = require('electron-settings');
+const os = require('os');
 const { spawn } = require('child_process');
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const { readFile, writeFile } = require('fs/promises');
@@ -149,4 +150,14 @@ ipcMain.on('vm:launch', async (_event, args) => {
         detached: true,
         shell: true,
     }).unref();
+});
+
+ipcMain.handle('system:request-info', () => {
+    const info = {
+        platform: os.platform(),
+        cpus: os.cpus().length,
+        memory: Math.floor(os.totalmem() / (1024 * 1024 * 1024)) // GiB
+    };
+
+    return JSON.parse(JSON.stringify(info));
 });

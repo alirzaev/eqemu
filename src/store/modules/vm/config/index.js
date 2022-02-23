@@ -1,4 +1,4 @@
-import { ACCELERATORS, BOOT_OPTIONS, GRAPHICS_CARDS } from '@/enums';
+import { BOOT_OPTIONS, GRAPHICS_CARDS } from '@/enums';
 import { VmCdrom } from './cdrom';
 import { VmDrive } from './drive';
 import { VmSpiceServer } from './spiceServer';
@@ -10,7 +10,6 @@ export const VmConfig = {
         cpu: {
             cores: 2,
         },
-        acceleration: ACCELERATORS[0].value,
         bootDevice: BOOT_OPTIONS[0].value,
         graphics: {
             card: GRAPHICS_CARDS[0].value,
@@ -61,7 +60,6 @@ export const VmConfig = {
                 cpu: state.cpu,
                 drive: state.drive,
                 cdrom: state.cdrom,
-                acceleration: state.acceleration,
                 bootDevice: state.bootDevice,
                 graphics: state.graphics,
                 audio: state.audio,

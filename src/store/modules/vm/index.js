@@ -8,18 +8,27 @@ export const VM = {
     },
     mutations: {},
     getters: {
-        params: (state) => {
+        // eslint-disable-next-line no-unused-vars
+        params: (state, _getters, rootState) => {
             const config = state.config;
+            const system = rootState.system;
 
             const params = [
                 'qemu-system-x86_64',
-                `-accel ${config.acceleration}`,
                 `-smp ${config.cpu.cores}`,
                 `-m ${config.memory}G`,
                 `-vga ${config.graphics.card}`,
                 `-boot order=${config.bootDevice},menu=on`,
                 '-usbdevice tablet',
             ];
+
+            if (system.platform === 'win32') {
+                params.push('-accel hax -accel whpx,kernel-irqchip=off -accel tcg');
+            } else if (system.platform === 'darwin') {
+                params.push('-accel hax -accel hvf -accel tcg');
+            } else if (system.platform === 'linux') {
+                params.push('-accel kvm -accel tcg');
+            }
 
             if (config.drive.enabled && config.drive.path) {
                 params.push(`-drive "file=${config.drive.path},format=qcow2"`);

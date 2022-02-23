@@ -2,7 +2,6 @@
   <div class="vm-config">
     <div class="vm-config-inner">
       <HorizontalLayout :even="true">
-        <AccelerationSettings />
         <Cpu />
         <Ram />
       </HorizontalLayout>
@@ -27,7 +26,6 @@
 </template>
 
 <script>
-import AccelerationSettings from './vm/AccelerationSettings.vue';
 import AudioDevice from './vm/AudioDevice.vue';
 import BootDevice from './vm/BootDevice.vue';
 import CPU from './vm/CPU.vue';
@@ -44,7 +42,6 @@ import HorizontalLayout from './HorizontalLayout.vue';
 export default {
     name: 'VmConfig',
     components: {
-        AccelerationSettings,
         AudioDevice,
         BootDevice,
         Cpu: CPU,
