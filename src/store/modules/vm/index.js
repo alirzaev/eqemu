@@ -40,7 +40,7 @@ export const VM = {
             }
 
             if (config.networking.enabled) {
-                params.push('-net nic,model=e1000 -net user');
+                params.push('-net nic,model=e1000e -net user');
             }
 
             if (config.audio.enabled) {
