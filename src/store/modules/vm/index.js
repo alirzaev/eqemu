@@ -15,6 +15,7 @@ export const VM = {
 
             const params = [
                 'qemu-system-x86_64',
+                '-machine q35',
                 `-smp ${config.cpu.cores}`,
                 `-m ${config.memory}G`,
                 `-vga ${config.graphics.card}`,
