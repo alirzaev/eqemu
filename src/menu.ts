@@ -1,9 +1,9 @@
-const { app, Menu } = require('electron');
+import { app, Menu, shell } from 'electron';
 
-export function createApplicationMenu(loadVmConfigCallback, saveVmConfigCallback) {
+export function createApplicationMenu(loadVmConfigCallback: () => Promise<void>, saveVmConfigCallback: () => Promise<void>) {
     const isMac = process.platform === 'darwin';
 
-    const template = [
+    const template: Electron.MenuItemConstructorOptions[] = [
         // { role: 'appMenu' }
         ...(isMac ? [{
             label: app.name,
@@ -18,7 +18,7 @@ export function createApplicationMenu(loadVmConfigCallback, saveVmConfigCallback
                 { type: 'separator' },
                 { role: 'quit' }
             ]
-        }] : []),
+        }] as Electron.MenuItemConstructorOptions[] : []),
         // { role: 'fileMenu' }
         {
             label: 'File',
@@ -56,11 +56,11 @@ export function createApplicationMenu(loadVmConfigCallback, saveVmConfigCallback
                             { role: 'stopSpeaking' }
                         ]
                     }
-                ] : [
+                ] as Electron.MenuItemConstructorOptions[] : [
                     { role: 'delete' },
                     { type: 'separator' },
                     { role: 'selectAll' }
-                ])
+                ] as Electron.MenuItemConstructorOptions[])
             ]
         },
         // { role: 'viewMenu' }
@@ -89,9 +89,9 @@ export function createApplicationMenu(loadVmConfigCallback, saveVmConfigCallback
                     { role: 'front' },
                     { type: 'separator' },
                     { role: 'window' }
-                ] : [
+                ] as Electron.MenuItemConstructorOptions[] : [
                     { role: 'close' }
-                ])
+                ] as Electron.MenuItemConstructorOptions[])
             ]
         },
         {
@@ -100,7 +100,6 @@ export function createApplicationMenu(loadVmConfigCallback, saveVmConfigCallback
                 {
                     label: 'Learn More',
                     click: async () => {
-                        const { shell } = require('electron');
                         await shell.openExternal('https://electronjs.org');
                     }
                 }

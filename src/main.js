@@ -1,9 +1,9 @@
-const settings = require('electron-settings');
-const os = require('os');
-const { spawn } = require('child_process');
-const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
-const { readFile, writeFile } = require('fs/promises');
-const { createApplicationMenu } = require('./menu');
+import settings from 'electron-settings';
+import os from 'os';
+import { spawn } from 'child_process';
+import { app, BrowserWindow, Menu, dialog, ipcMain } from 'electron';
+import { readFile, writeFile } from 'fs/promises';
+import { createApplicationMenu } from './menu.ts';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
