@@ -1,29 +1,30 @@
 import { ipcRenderer, contextBridge } from 'electron';
-import { SystemInfo } from './types';
+
+import { ElectronBridge } from './types';
 
 contextBridge.exposeInMainWorld('electron', {
     vmConfig: {
-        onRequestConfig(callback: (event: Electron.IpcRendererEvent) => void) {
+        onRequestConfig(callback) {
             ipcRenderer.on('vm:request-config', callback);
         },
-        onLoadConfig(callback: (event: Electron.IpcRendererEvent, config: string) => void) {
+        onLoadConfig(callback) {
             ipcRenderer.on('vm:load-config', callback);
         },
-        requestDrivePath(): Promise<string> {
+        requestDrivePath() {
             return ipcRenderer.invoke('vm:request-drive-path');
         },
-        requestCdromPath(): Promise<string> {
+        requestCdromPath() {
             return ipcRenderer.invoke('vm:request-cdrom-path');
         },
     },
     vmManager: {
-        launchVm(args: string[]): void {
+        launchVm(args) {
             ipcRenderer.send('vm:launch', args);
         },
     },
     system: {
-        requestInfo(): Promise<SystemInfo> {
+        requestInfo() {
             return ipcRenderer.invoke('system:request-info');
         },
     },
-});
+} as ElectronBridge);

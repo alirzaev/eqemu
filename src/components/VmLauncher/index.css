@@ -1,0 +1,60 @@
+.launcher {
+    position: relative;
+    height: 100%;
+}
+
+.launcher-inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+.launcher-shell-selector-title {
+    margin-bottom: 0.5rem;
+}
+
+.launcher-script {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.launcher-script code {
+    white-space: pre;
+    overflow: auto;
+    width: 100%;
+}
+
+.launcher-script-btn-clipboard {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    z-index: 10;
+    display: block;
+    opacity: 0.5;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65em;
+    color: #0d6efd;
+    background-color: #fff;
+    border: 1px solid;
+    border-radius: 0.25rem;
+}
+
+.launcher-script-btn-clipboard:hover {
+    opacity: 1;
+}
+
+.launcher-panel {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}

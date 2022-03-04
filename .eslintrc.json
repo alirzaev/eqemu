@@ -6,22 +6,17 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:vue/essential",
-        "plugin:vue/vue3-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
-    "parser": "vue-eslint-parser",
     "parserOptions": {
         "parser": "@typescript-eslint/parser",
-        "extraFileExtensions": [".vue"],
         "ecmaFeatures": {
-          "jsx": false
+            "jsx": true
         },
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "plugins": [
-        "vue",
         "@typescript-eslint"
     ],
     "rules": {

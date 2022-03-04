@@ -1,0 +1,17 @@
+.app {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.app-launcher-wrapper,
+.app-vm-config-wrapper {
+    flex-grow: 1;
+    padding: 0;
+    width: 100%;
+}

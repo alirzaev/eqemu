@@ -1,6 +1,9 @@
 import { app, Menu, shell } from 'electron';
 
-export function createApplicationMenu(loadVmConfigCallback: () => Promise<void>, saveVmConfigCallback: () => Promise<void>) {
+export function createApplicationMenu(
+    loadVmConfigCallback: () => Promise<void>,
+    saveVmConfigCallback: () => Promise<void>
+) {
     const isMac = process.platform === 'darwin';
 
     const template: Electron.MenuItemConstructorOptions[] = [

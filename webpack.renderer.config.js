@@ -1,14 +1,10 @@
 const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader');
 
 const rules = require('./webpack.rules');
 
 rules.push({
     test: /\.css$/,
     use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-}, {
-    test: /\.vue$/,
-    loader: 'vue-loader'
 });
 
 module.exports = {
@@ -16,12 +12,10 @@ module.exports = {
     module: {
         rules,
     },
-    plugins: [
-        new VueLoaderPlugin()
-    ],
     resolve: {
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
         alias: {
             '@': path.resolve(__dirname, 'src'),
-        }
+        },
     },
 };
