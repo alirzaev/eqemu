@@ -42,23 +42,17 @@ const initialState: VmState = {
     },
 };
 
-export const setOpticalDrivePath = createAsyncThunk(
-    'vm/setOpticalDrivePath',
-    async () => {
-        const path = await electron.vmConfig.requestCdromPath();
+export const setOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', async () => {
+    const path = await electron.vmConfig.requestCdromPath();
 
-        return path;
-    }
-);
+    return path;
+});
 
-export const setHardDrivePath = createAsyncThunk(
-    'vm/setHardDrivePath',
-    async () => {
-        const path = await electron.vmConfig.requestDrivePath();
+export const setHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async () => {
+    const path = await electron.vmConfig.requestDrivePath();
 
-        return path;
-    }
-);
+    return path;
+});
 
 export const sendConfigToMainProcess = createAsyncThunk<
     void,
@@ -66,14 +60,11 @@ export const sendConfigToMainProcess = createAsyncThunk<
     {
         state: RootState;
     }
->(
-    'vm/sendConfigToMainProcess',
-    async (event, { getState }) => {
-        const { vm } = getState();
+>('vm/sendConfigToMainProcess', async (event, { getState }) => {
+    const { vm } = getState();
 
-        event.sender.send(VM_REQUEST_CONFIG_VALUE, JSON.stringify(vm));
-    }
-);
+    event.sender.send(VM_REQUEST_CONFIG_VALUE, JSON.stringify(vm));
+});
 
 export const vmSlice = createSlice({
     name: 'vm',
@@ -125,18 +116,8 @@ export const vmSlice = createSlice({
             state.spiceServer.usbRedirection = action.payload;
         },
         loadVmConfig: (state: VmState, action: PayloadAction<string>) => {
-            const {
-                audio,
-                bootDevice,
-                cdrom,
-                cpu,
-                drive,
-                graphics,
-                memory,
-                network,
-                spiceAgent,
-                spiceServer
-            } = JSON.parse(action.payload) as VmConfig;
+            const { audio, bootDevice, cdrom, cpu, drive, graphics, memory, network, spiceAgent, spiceServer } =
+                JSON.parse(action.payload) as VmConfig;
 
             state.audio = audio;
             state.bootDevice = bootDevice;
@@ -148,9 +129,9 @@ export const vmSlice = createSlice({
             state.network = network;
             state.spiceAgent = spiceAgent;
             state.spiceServer = spiceServer;
-        }
+        },
     },
-    extraReducers: (builder) => {
+    extraReducers: builder => {
         builder.addCase(setOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
             state.cdrom.path = action.payload;
         });

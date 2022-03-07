@@ -8,34 +8,36 @@ export function createApplicationMenu(
 
     const template: Electron.MenuItemConstructorOptions[] = [
         // { role: 'appMenu' }
-        ...(isMac ? [{
-            label: app.name,
-            submenu: [
-                { role: 'about' },
-                { type: 'separator' },
-                { role: 'services' },
-                { type: 'separator' },
-                { role: 'hide' },
-                { role: 'hideOthers' },
-                { role: 'unhide' },
-                { type: 'separator' },
-                { role: 'quit' }
-            ]
-        }] as Electron.MenuItemConstructorOptions[] : []),
+        ...(isMac
+            ? ([
+                  {
+                      label: app.name,
+                      submenu: [
+                          { role: 'about' },
+                          { type: 'separator' },
+                          { role: 'services' },
+                          { type: 'separator' },
+                          { role: 'hide' },
+                          { role: 'hideOthers' },
+                          { role: 'unhide' },
+                          { type: 'separator' },
+                          { role: 'quit' },
+                      ],
+                  },
+              ] as Electron.MenuItemConstructorOptions[])
+            : []),
         // { role: 'fileMenu' }
         {
             label: 'File',
-            submenu: [
-                isMac ? { role: 'close' } : { role: 'quit' }
-            ]
+            submenu: [isMac ? { role: 'close' } : { role: 'quit' }],
         },
         // { role: 'vmMenu' }
         {
             label: 'VM',
             submenu: [
                 { label: 'Load VM config', click: loadVmConfigCallback },
-                { label: 'Save VM config', click: saveVmConfigCallback }
-            ]
+                { label: 'Save VM config', click: saveVmConfigCallback },
+            ],
         },
         // { role: 'editMenu' }
         {
@@ -47,24 +49,23 @@ export function createApplicationMenu(
                 { role: 'cut' },
                 { role: 'copy' },
                 { role: 'paste' },
-                ...(isMac ? [
-                    { role: 'pasteAndMatchStyle' },
-                    { role: 'delete' },
-                    { role: 'selectAll' },
-                    { type: 'separator' },
-                    {
-                        label: 'Speech',
-                        submenu: [
-                            { role: 'startSpeaking' },
-                            { role: 'stopSpeaking' }
-                        ]
-                    }
-                ] as Electron.MenuItemConstructorOptions[] : [
-                    { role: 'delete' },
-                    { type: 'separator' },
-                    { role: 'selectAll' }
-                ] as Electron.MenuItemConstructorOptions[])
-            ]
+                ...(isMac
+                    ? ([
+                          { role: 'pasteAndMatchStyle' },
+                          { role: 'delete' },
+                          { role: 'selectAll' },
+                          { type: 'separator' },
+                          {
+                              label: 'Speech',
+                              submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
+                          },
+                      ] as Electron.MenuItemConstructorOptions[])
+                    : ([
+                          { role: 'delete' },
+                          { type: 'separator' },
+                          { role: 'selectAll' },
+                      ] as Electron.MenuItemConstructorOptions[])),
+            ],
         },
         // { role: 'viewMenu' }
         {
@@ -78,8 +79,8 @@ export function createApplicationMenu(
                 { role: 'zoomIn' },
                 { role: 'zoomOut' },
                 { type: 'separator' },
-                { role: 'togglefullscreen' }
-            ]
+                { role: 'togglefullscreen' },
+            ],
         },
         // { role: 'windowMenu' }
         {
@@ -87,15 +88,15 @@ export function createApplicationMenu(
             submenu: [
                 { role: 'minimize' },
                 { role: 'zoom' },
-                ...(isMac ? [
-                    { type: 'separator' },
-                    { role: 'front' },
-                    { type: 'separator' },
-                    { role: 'window' }
-                ] as Electron.MenuItemConstructorOptions[] : [
-                    { role: 'close' }
-                ] as Electron.MenuItemConstructorOptions[])
-            ]
+                ...(isMac
+                    ? ([
+                          { type: 'separator' },
+                          { role: 'front' },
+                          { type: 'separator' },
+                          { role: 'window' },
+                      ] as Electron.MenuItemConstructorOptions[])
+                    : ([{ role: 'close' }] as Electron.MenuItemConstructorOptions[])),
+            ],
         },
         {
             role: 'help',
@@ -104,10 +105,10 @@ export function createApplicationMenu(
                     label: 'Learn More',
                     click: async () => {
                         await shell.openExternal('https://electronjs.org');
-                    }
-                }
-            ]
-        }
+                    },
+                },
+            ],
+        },
     ];
 
     return Menu.buildFromTemplate(template);

@@ -39,7 +39,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
         params.push(
             '-device virtio-serial',
             '-chardev spicevmc,id=vdagent,debug=0,name=vdagent',
-            '-device virtserialport,chardev=vdagent,name=com.redhat.spice.0',
+            '-device virtserialport,chardev=vdagent,name=com.redhat.spice.0'
         );
     }
 
@@ -61,7 +61,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
                 '-chardev spicevmc,name=usbredir,id=usbredirchardev2',
                 '-device usb-redir,chardev=usbredirchardev2,id=usbredirdev2',
                 '-chardev spicevmc,name=usbredir,id=usbredirchardev3',
-                '-device usb-redir,chardev=usbredirchardev3,id=usbredirdev3',
+                '-device usb-redir,chardev=usbredirchardev3,id=usbredirdev3'
             );
         }
     }

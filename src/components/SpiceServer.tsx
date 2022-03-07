@@ -71,10 +71,7 @@ export function SpiceServer() {
                                 checked={ticketing}
                                 onChange={onChangeTicketingHandler}
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor="spiceServerTicketing"
-                            >
+                            <label className="form-check-label" htmlFor="spiceServerTicketing">
                                 With ticketing
                             </label>
                         </div>
@@ -88,10 +85,7 @@ export function SpiceServer() {
                                 checked={usbRedirection}
                                 onChange={onChangeUsbRedirectionHandler}
                             />
-                            <label
-                                className="form-check-label"
-                                htmlFor="spiceServerUsbRedirection"
-                            >
+                            <label className="form-check-label" htmlFor="spiceServerUsbRedirection">
                                 With USB redirection
                             </label>
                         </div>

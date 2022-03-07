@@ -12,14 +12,11 @@ const initialState: SystemState = {
     memory: 1,
 };
 
-export const getInfo = createAsyncThunk(
-    'system/getInfo',
-    async () => {
-        const info = await electron.system.requestInfo();
+export const getInfo = createAsyncThunk('system/getInfo', async () => {
+    const info = await electron.system.requestInfo();
 
-        return info;
-    }
-);
+    return info;
+});
 
 export const systemSlice = createSlice({
     name: 'system',
@@ -31,7 +28,7 @@ export const systemSlice = createSlice({
             state.memory = action.payload.memory;
         },
     },
-    extraReducers: (builder) => {
+    extraReducers: builder => {
         builder.addCase(getInfo.fulfilled, (state, action) => {
             state.platform = action.payload.platform;
             state.cpus = action.payload.cpus;

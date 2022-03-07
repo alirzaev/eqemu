@@ -8,11 +8,5 @@ interface LayoutProps {
 }
 
 export function HorizontalLayout({ even, children }: LayoutProps) {
-    return (
-        <div
-            className={`horizontal-layout ${even ? 'horizontal-layout-even' : ''}`}
-        >
-            {children}
-        </div>
-    );
+    return <div className={`horizontal-layout ${even ? 'horizontal-layout-even' : ''}`}>{children}</div>;
 }

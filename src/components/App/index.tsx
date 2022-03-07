@@ -15,7 +15,7 @@ export function App() {
     useEffect(() => {
         dispatch(getInfo());
 
-        electron.vmConfig.onRequestConfig(async (event) => {
+        electron.vmConfig.onRequestConfig(async event => {
             dispatch(sendConfigToMainProcess(event));
         });
 

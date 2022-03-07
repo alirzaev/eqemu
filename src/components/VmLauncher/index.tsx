@@ -43,9 +43,7 @@ export function VmLauncher() {
         <div className="launcher">
             <div className="launcher-inner">
                 <div className="launcher-shell-selector">
-                    <p className="launcher-shell-selector-title">
-                        Generated shell script
-                    </p>
+                    <p className="launcher-shell-selector-title">Generated shell script</p>
                     {ShellList.map(({ text, value }) => (
                         <div className="form-check form-check-inline" key={value}>
                             <input

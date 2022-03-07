@@ -19,3 +19,9 @@ yarn package
 ```shell script
 yarn lint
 ```
+
+## Format
+
+```shell script
+yarn format
+```

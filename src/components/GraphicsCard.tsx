@@ -46,12 +46,7 @@ export function GraphicsCard() {
             <label htmlFor="graphicsCard" className="form-label">
                 Graphics card
             </label>
-            <select
-                id="graphicsCard"
-                className="form-select"
-                value={card}
-                onChange={onChangeBootDeviceHandler}
-            >
+            <select id="graphicsCard" className="form-select" value={card} onChange={onChangeBootDeviceHandler}>
                 {GraphicsCardList.map(({ text, value }) => (
                     <option key={value} value={value}>
                         {text}

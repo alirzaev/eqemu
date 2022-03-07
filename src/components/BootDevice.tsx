@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setBootDevice } from '../store/slices/vm';
 import { BootDevice as BootDeviceEnum } from '../enums';
 
-const BootDeviceList: Array<{ text: string, value: BootDeviceEnum }> = [
+const BootDeviceList: Array<{ text: string; value: BootDeviceEnum }> = [
     {
         text: 'CD-ROM',
         value: BootDeviceEnum.Cdrom,
@@ -34,12 +34,7 @@ export function BootDevice() {
             <label htmlFor="bootDevice" className="form-label">
                 Boot device
             </label>
-            <select
-                id="bootDevice"
-                className="form-select"
-                value={bootDevice}
-                onChange={onChangeBootDeviceHandler}
-            >
+            <select id="bootDevice" className="form-select" value={bootDevice} onChange={onChangeBootDeviceHandler}>
                 {BootDeviceList.map(({ text, value }) => (
                     <option key={value} value={value}>
                         {text}

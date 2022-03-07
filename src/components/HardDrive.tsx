@@ -23,14 +23,7 @@ export function HardDrive() {
                 Hard drive
             </label>
             <div className="input-group mb-2">
-                <input
-                    id="drivePath"
-                    className="form-control"
-                    type="text"
-                    value={path}
-                    disabled={!enabled}
-                    readOnly
-                />
+                <input id="drivePath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
                 <button
                     className="btn btn-outline-primary"
                     type="button"

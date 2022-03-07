@@ -62,7 +62,7 @@ export const onVmLaunch = (window: Electron.BrowserWindow) => {
         if (!qemuSystemExecutablePath) {
             await dialog.showMessageBox(window, {
                 title: '',
-                message: 'Please provide the path to \'qemu-system-x86_64\' executable',
+                message: "Please provide the path to 'qemu-system-x86_64' executable",
             });
 
             const path = await dialog.showOpenDialog(window, {

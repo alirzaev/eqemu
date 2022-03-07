@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import {
-    setOpticalDriveEnabled,
-    setOpticalDrivePath,
-} from '../store/slices/vm';
+import { setOpticalDriveEnabled, setOpticalDrivePath } from '../store/slices/vm';
 
 export function OpticalDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.cdrom);
@@ -26,14 +23,7 @@ export function OpticalDrive() {
                 Optical drive
             </label>
             <div className="input-group mb-2">
-                <input
-                    id="cdromPath"
-                    className="form-control"
-                    type="text"
-                    value={path}
-                    disabled={!enabled}
-                    readOnly
-                />
+                <input id="cdromPath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
                 <button
                     className="btn btn-outline-primary"
                     type="button"

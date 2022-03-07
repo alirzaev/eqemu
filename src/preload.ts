@@ -6,7 +6,7 @@ import {
     VM_REQUEST_DRIVE_PATH,
     VM_REQUEST_CDROM_PATH,
     VM_LAUNCH,
-    SYSTEM_REQUEST_INFO
+    SYSTEM_REQUEST_INFO,
 } from './ipc/signals';
 
 import { ElectronBridge } from './types';

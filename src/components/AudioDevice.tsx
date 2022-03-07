@@ -23,10 +23,7 @@ export function AudioDevice() {
                     checked={enabled}
                     onChange={onChangeEnabledHandler}
                 />
-                <label
-                    className="form-check-label"
-                    htmlFor="audioEnabled"
-                >
+                <label className="form-check-label" htmlFor="audioEnabled">
                     Enable audio device
                 </label>
             </div>
