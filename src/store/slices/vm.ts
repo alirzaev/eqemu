@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '..';
 import { BootDevice, GraphicsCard } from '../../enums';
+import { VM_REQUEST_CONFIG_VALUE } from '../../ipc/signals';
 import { VmConfig } from '../../types';
 
 type VmState = VmConfig;
@@ -70,7 +71,7 @@ export const sendConfigToMainProcess = createAsyncThunk<
     async (event, { getState }) => {
         const { vm } = getState();
 
-        event.sender.send('vm:request-config-value', JSON.stringify(vm));
+        event.sender.send(VM_REQUEST_CONFIG_VALUE, JSON.stringify(vm));
     }
 );
 
