@@ -29,7 +29,11 @@ export const onVmRequestDrivePath = (window: Electron.BrowserWindow) => {
     ipcMain.handle(VM_REQUEST_DRIVE_PATH, async () => {
         const path = await dialog.showOpenDialog(window, {
             properties: ['openFile'],
-            filters: [{ name: 'QCOW2', extensions: ['qcow2'] }],
+            filters: [
+                { name: 'QEMU disk image', extensions: ['qcow2'] },
+                { name: 'VMware disk image', extensions: ['vmdk'] },
+                { name: 'VirtualBox disk image', extensions: ['vdi'] },
+            ],
         });
 
         if (!path.canceled) {

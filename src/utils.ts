@@ -1,4 +1,4 @@
-import { SystemInfo, VmConfig } from './types';
+import { DiskImageFormat, SystemInfo, VmConfig } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
@@ -20,7 +20,9 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     }
 
     if (config.drive.enabled && config.drive.path) {
-        params.push(`-drive "file=${config.drive.path},format=qcow2"`);
+        const format = getImageFileFormat(config.drive.path);
+
+        params.push(`-drive "file=${config.drive.path},format=${format}"`);
     }
 
     if (config.cdrom.enabled && config.cdrom.path) {
@@ -67,4 +69,30 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     }
 
     return params;
+}
+
+export function getPathExtension(path: string): string {
+    const fileName = path.split(/[\\/]/).pop() ?? '';
+    const pos = fileName?.lastIndexOf('.') ?? -1;
+
+    if (fileName === '' || pos < 1) {
+        return '';
+    } else {
+        return fileName.slice(pos + 1);
+    }
+}
+
+export function getImageFileFormat(path: string): DiskImageFormat {
+    const extension = getPathExtension(path);
+
+    switch (extension) {
+        case 'qcow2':
+            return DiskImageFormat.QCow2;
+        case 'vmdk':
+            return DiskImageFormat.Vmware;
+        case 'vdi':
+            return DiskImageFormat.Vdi;
+        default:
+            return DiskImageFormat.Raw;
+    }
 }

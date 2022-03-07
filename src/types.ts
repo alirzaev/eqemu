@@ -55,3 +55,10 @@ export interface VmConfig {
         usbRedirection: boolean;
     };
 }
+
+export enum DiskImageFormat {
+    QCow2 = 'qcow2',
+    Vmware = 'vmdk',
+    Vdi = 'vdi',
+    Raw = 'raw',
+}
