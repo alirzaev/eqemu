@@ -1,4 +1,5 @@
-import { DiskImageFormat, SystemInfo, VmConfig } from './types';
+import { DiskImageFormat, Shell } from './enums';
+import { SystemInfo, VmConfig } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
@@ -94,5 +95,16 @@ export function getImageFileFormat(path: string): DiskImageFormat {
             return DiskImageFormat.Vdi;
         default:
             return DiskImageFormat.Raw;
+    }
+}
+
+export function getShellMultilineDelimeter(shell: Shell): string {
+    switch (shell) {
+        case Shell.Cmd:
+            return '^';
+        case Shell.PowerShell:
+            return '`';
+        case Shell.Bash:
+            return '\\';
     }
 }

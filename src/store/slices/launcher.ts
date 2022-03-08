@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ShellDelimeter } from '../../enums';
+import { Shell } from '../../enums';
 
 interface LauncherState {
-    shell: ShellDelimeter;
+    shell: Shell;
 }
 
 const initialState: LauncherState = {
-    shell: ShellDelimeter.Cmd,
+    shell: Shell.Cmd,
 };
 
 export const launcherSlice = createSlice({
     name: 'laucnher',
     initialState,
     reducers: {
-        setShell: (state: LauncherState, action: PayloadAction<ShellDelimeter>) => {
+        setShell: (state: LauncherState, action: PayloadAction<Shell>) => {
             state.shell = action.payload;
         },
     },

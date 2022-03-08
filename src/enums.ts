@@ -13,8 +13,15 @@ export enum BootDevice {
     Network = 'n',
 }
 
-export enum ShellDelimeter {
-    Cmd = '^',
-    PowerShell = '`',
-    Bash = '\\',
+export enum Shell {
+    Cmd = 'cmd',
+    PowerShell = 'powershell',
+    Bash = 'bash',
+}
+
+export enum DiskImageFormat {
+    QCow2 = 'qcow2',
+    Vmware = 'vmdk',
+    Vdi = 'vdi',
+    Raw = 'raw',
 }

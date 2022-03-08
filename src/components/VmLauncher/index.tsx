@@ -2,23 +2,23 @@ import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setShell } from '../../store/slices/launcher';
-import { ShellDelimeter } from '../../enums';
-import { buildQemuCmdArgs } from '../../utils';
+import { Shell } from '../../enums';
+import { buildQemuCmdArgs, getShellMultilineDelimeter } from '../../utils';
 
 import './index.css';
 
-const ShellList: Array<{ text: string; value: ShellDelimeter }> = [
+const ShellList: Array<{ text: string; value: Shell }> = [
     {
         text: 'cmd',
-        value: ShellDelimeter.Cmd,
+        value: Shell.Cmd,
     },
     {
         text: 'PowerShell',
-        value: ShellDelimeter.PowerShell,
+        value: Shell.PowerShell,
     },
     {
         text: 'bash',
-        value: ShellDelimeter.Bash,
+        value: Shell.Bash,
     },
 ];
 
@@ -28,12 +28,13 @@ export function VmLauncher() {
     const dispatch = useAppDispatch();
 
     const onChangeShellHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value as ShellDelimeter;
+        const value = event.target.value as Shell;
 
         dispatch(setShell(value));
     };
 
-    const script = buildQemuCmdArgs(config, system).join(` ${shell}\n`);
+    const delimeter = getShellMultilineDelimeter(shell);
+    const script = buildQemuCmdArgs(config, system).join(` ${delimeter}\n`);
 
     const onClickCopyButtonHandler = () => {
         navigator.clipboard.writeText(script);
