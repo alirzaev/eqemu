@@ -29,14 +29,10 @@ export function createApplicationMenu(
         // { role: 'fileMenu' }
         {
             label: 'File',
-            submenu: [isMac ? { role: 'close' } : { role: 'quit' }],
-        },
-        // { role: 'vmMenu' }
-        {
-            label: 'VM',
             submenu: [
-                { label: 'Load VM config', click: loadVmConfigCallback },
-                { label: 'Save VM config', click: saveVmConfigCallback },
+                { label: 'Open', click: loadVmConfigCallback },
+                { label: 'Save', click: saveVmConfigCallback },
+                isMac ? { role: 'close' } : { role: 'quit' },
             ],
         },
         // { role: 'editMenu' }
@@ -104,7 +100,7 @@ export function createApplicationMenu(
                 {
                     label: 'Learn More',
                     click: async () => {
-                        await shell.openExternal('https://electronjs.org');
+                        await shell.openExternal('https://github.com/alirzaev/eqemu');
                     },
                 },
             ],
