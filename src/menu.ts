@@ -30,8 +30,8 @@ export function createApplicationMenu(
         {
             label: 'File',
             submenu: [
-                { label: 'Open', click: loadVmConfigCallback },
-                { label: 'Save', click: saveVmConfigCallback },
+                { label: 'Open', accelerator: 'CommandOrControl+O', click: loadVmConfigCallback },
+                { label: 'Save', accelerator: 'CommandOrControl+S', click: saveVmConfigCallback },
                 isMac ? { role: 'close' } : { role: 'quit' },
             ],
         },
