@@ -1,11 +1,9 @@
-export const VM_REQUEST_CONFIG = 'vm:request-config';
-export const VM_REQUEST_CONFIG_VALUE = 'vm:request-config-value';
+export const VM_EXPORT_CONFIG = 'vm:export-config';
+export const VM_EXPORT_CONFIG_VALUE = 'vm:export-config-value';
 export const VM_LOAD_CONFIG = 'vm:load-config';
-export const VM_REQUEST_DRIVE_PATH = 'vm:request-drive-path';
-export const VM_REQUEST_CDROM_PATH = 'vm:request-cdrom-path';
 export const VM_LAUNCH = 'vm:launch';
 
-export const SYSTEM_REQUEST_INFO = 'system:request-info';
+export const SYSTEM_GET_INFO = 'system:get-info';
 export const SYSTEM_CHECK_QEMU = 'system:check-qemu';
 
 export const SETTINGS_OPEN = 'settings:open';

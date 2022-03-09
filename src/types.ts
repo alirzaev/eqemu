@@ -8,16 +8,14 @@ export interface SystemInfo {
 
 export interface ElectronBridge {
     vmConfig: {
-        onRequestConfig: (callback: (event: Electron.IpcRendererEvent) => void) => void;
+        onExportConfig: (callback: (event: Electron.IpcRendererEvent) => void) => void;
         onLoadConfig: (callback: (event: Electron.IpcRendererEvent, config: string) => void) => void;
-        requestDrivePath: () => Promise<string>;
-        requestCdromPath: () => Promise<string>;
     };
     vmManager: {
         launchVm: (args: string[]) => void;
     };
     system: {
-        requestInfo: () => Promise<SystemInfo>;
+        getInfo: () => Promise<SystemInfo>;
         checkQemu: (qemuPath: string) => Promise<[Error | null, string]>;
     };
     settings: {

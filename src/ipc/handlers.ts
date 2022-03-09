@@ -4,63 +4,28 @@ import { join } from 'path';
 import { ipcMain, dialog } from 'electron';
 import { readFile, writeFile } from 'fs/promises';
 import { execFile, spawn } from 'child_process';
+
 import {
     DIALOG_SHOW_OPEN,
     SETTINGS_GET_KEY,
     SETTINGS_OPEN,
     SETTINGS_SET_KEY,
     SYSTEM_CHECK_QEMU,
-    SYSTEM_REQUEST_INFO,
+    SYSTEM_GET_INFO,
     VM_LAUNCH,
     VM_LOAD_CONFIG,
-    VM_REQUEST_CDROM_PATH,
-    VM_REQUEST_CONFIG,
-    VM_REQUEST_CONFIG_VALUE,
-    VM_REQUEST_DRIVE_PATH,
+    VM_EXPORT_CONFIG,
+    VM_EXPORT_CONFIG_VALUE,
 } from './signals';
 
-export const onVmRequestConfigValue = (window: Electron.BrowserWindow) => {
-    ipcMain.on(VM_REQUEST_CONFIG_VALUE, async (_event, config) => {
+export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
+    ipcMain.on(VM_EXPORT_CONFIG_VALUE, async (_event, config) => {
         const path = await dialog.showSaveDialog(window, {
             filters: [{ name: 'JSON', extensions: ['json'] }],
         });
 
         if (!path.canceled && path.filePath) {
             await writeFile(path.filePath, config, { encoding: 'utf-8' });
-        }
-    });
-};
-
-export const onVmRequestDrivePath = (window: Electron.BrowserWindow) => {
-    ipcMain.handle(VM_REQUEST_DRIVE_PATH, async () => {
-        const path = await dialog.showOpenDialog(window, {
-            properties: ['openFile'],
-            filters: [
-                { name: 'QEMU disk image', extensions: ['qcow2'] },
-                { name: 'VMware disk image', extensions: ['vmdk'] },
-                { name: 'VirtualBox disk image', extensions: ['vdi'] },
-            ],
-        });
-
-        if (!path.canceled) {
-            return path.filePaths[0];
-        } else {
-            return '';
-        }
-    });
-};
-
-export const onVmRequestCdromPath = (window: Electron.BrowserWindow) => {
-    ipcMain.handle(VM_REQUEST_CDROM_PATH, async () => {
-        const path = await dialog.showOpenDialog(window, {
-            properties: ['openFile'],
-            filters: [{ extensions: ['iso'], name: 'ISO images' }],
-        });
-
-        if (!path.canceled) {
-            return path.filePaths[0];
-        } else {
-            return '';
         }
     });
 };
@@ -85,8 +50,8 @@ export const onVmLaunch = (window: Electron.BrowserWindow) => {
     });
 };
 
-export const onSystemRequestInfo = () => {
-    ipcMain.handle(SYSTEM_REQUEST_INFO, () => {
+export const onSystemGetInfo = () => {
+    ipcMain.handle(SYSTEM_GET_INFO, () => {
         const info = {
             platform: os.platform(),
             cpus: os.cpus().length,
@@ -134,7 +99,7 @@ export const onMenuVmLoadConfig = (window: Electron.BrowserWindow) => async () =
 };
 
 export const onMenuVmSaveConfig = (window: Electron.BrowserWindow) => async () => {
-    window.webContents.send(VM_REQUEST_CONFIG);
+    window.webContents.send(VM_EXPORT_CONFIG);
 };
 
 export const onMenuSettingsOpen = (window: Electron.BrowserWindow) => async () => {
@@ -142,22 +107,19 @@ export const onMenuSettingsOpen = (window: Electron.BrowserWindow) => async () =
 };
 
 export const onSettingsGetKey = () => {
-    ipcMain.handle(SETTINGS_GET_KEY, (_event: Electron.IpcMainInvokeEvent, keyPath: string) => {
+    ipcMain.handle(SETTINGS_GET_KEY, (_event, keyPath: string) => {
         return settings.get(keyPath);
     });
 };
 
 export const onSettingsSetKey = () => {
-    ipcMain.handle(SETTINGS_SET_KEY, (_event: Electron.IpcMainInvokeEvent, keyPath: string, value) => {
+    ipcMain.handle(SETTINGS_SET_KEY, (_event, keyPath: string, value) => {
         return settings.set(keyPath, value);
     });
 };
 
 export const onShowOpenDialog = (window: Electron.BrowserWindow) => {
-    ipcMain.handle(
-        DIALOG_SHOW_OPEN,
-        (_event: Electron.IpcMainInvokeEvent, dialogOptions: Electron.OpenDialogOptions) => {
-            return dialog.showOpenDialog(window, dialogOptions);
-        }
-    );
+    ipcMain.handle(DIALOG_SHOW_OPEN, (_event, dialogOptions: Electron.OpenDialogOptions) => {
+        return dialog.showOpenDialog(window, dialogOptions);
+    });
 };

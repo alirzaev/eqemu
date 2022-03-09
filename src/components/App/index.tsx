@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getInfo } from '../../store/slices/system';
+import { getSystemInfo } from '../../store/slices/system';
 import { loadVmConfig, sendConfigToMainProcess } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
 import { Main } from '../Main';
@@ -15,9 +15,9 @@ export function App() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getInfo());
+        dispatch(getSystemInfo());
 
-        electron.vmConfig.onRequestConfig(async event => {
+        electron.vmConfig.onExportConfig(async event => {
             dispatch(sendConfigToMainProcess(event));
         });
 

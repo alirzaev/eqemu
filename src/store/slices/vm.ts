@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '..';
 import { BootDevice, GraphicsCard } from '../../enums';
-import { VM_REQUEST_CONFIG_VALUE } from '../../ipc/signals';
+import { VM_EXPORT_CONFIG_VALUE } from '../../ipc/signals';
 import { VmConfig } from '../../types';
 
 type VmState = VmConfig;
@@ -43,15 +43,25 @@ const initialState: VmState = {
 };
 
 export const setOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', async () => {
-    const path = await electron.vmConfig.requestCdromPath();
+    const result = await electron.dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [{ extensions: ['iso'], name: 'ISO images' }],
+    });
 
-    return path;
+    return !result.canceled ? result.filePaths[0] : '';
 });
 
 export const setHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async () => {
-    const path = await electron.vmConfig.requestDrivePath();
+    const result = await electron.dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+            { name: 'QEMU disk image', extensions: ['qcow2'] },
+            { name: 'VMware disk image', extensions: ['vmdk'] },
+            { name: 'VirtualBox disk image', extensions: ['vdi'] },
+        ],
+    });
 
-    return path;
+    return !result.canceled ? result.filePaths[0] : '';
 });
 
 export const sendConfigToMainProcess = createAsyncThunk<
@@ -63,7 +73,7 @@ export const sendConfigToMainProcess = createAsyncThunk<
 >('vm/sendConfigToMainProcess', async (event, { getState }) => {
     const { vm } = getState();
 
-    event.sender.send(VM_REQUEST_CONFIG_VALUE, JSON.stringify(vm));
+    event.sender.send(VM_EXPORT_CONFIG_VALUE, JSON.stringify(vm));
 });
 
 export const vmSlice = createSlice({

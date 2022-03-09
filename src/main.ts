@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu } from 'electron';
+
 import * as handlers from './ipc/handlers';
 import { createApplicationMenu } from './menu';
 
@@ -37,12 +38,10 @@ const createWindow = () => {
 
     Menu.setApplicationMenu(menu);
 
-    handlers.onVmRequestDrivePath(mainWindow);
-    handlers.onVmRequestCdromPath(mainWindow);
-    handlers.onVmRequestConfigValue(mainWindow);
+    handlers.onVmExportConfigValue(mainWindow);
     handlers.onVmLaunch(mainWindow);
 
-    handlers.onSystemRequestInfo();
+    handlers.onSystemGetInfo();
     handlers.onSystemCheckQemu();
 
     handlers.onSettingsGetKey();
