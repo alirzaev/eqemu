@@ -4,14 +4,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setCpuCores } from '../store/slices/vm';
 
 export function Cpu() {
-    const cores = useAppSelector(state => state.vm.cpu.cores);
+    const { cores } = useAppSelector(state => state.vm.cpu);
     const dispatch = useAppDispatch();
-
-    const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Number.parseInt(event.target.value);
-
-        dispatch(setCpuCores(value));
-    };
 
     return (
         <div>
@@ -23,7 +17,7 @@ export function Cpu() {
                 type="number"
                 className="form-control"
                 value={cores}
-                onChange={onChangeHandler}
+                onChange={event => dispatch(setCpuCores(Number.parseInt(event.target.value)))}
                 min="1"
                 max="4"
             />

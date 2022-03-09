@@ -4,14 +4,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setAudioEnabled } from '../store/slices/vm';
 
 export function AudioDevice() {
-    const enabled = useAppSelector(state => state.vm.audio.enabled);
+    const { enabled } = useAppSelector(state => state.vm.audio);
     const dispatch = useAppDispatch();
-
-    const onChangeEnabledHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.checked;
-
-        dispatch(setAudioEnabled(value));
-    };
 
     return (
         <div>
@@ -21,7 +15,7 @@ export function AudioDevice() {
                     className="form-check-input"
                     type="checkbox"
                     checked={enabled}
-                    onChange={onChangeEnabledHandler}
+                    onChange={event => dispatch(setAudioEnabled(event.target.checked))}
                 />
                 <label className="form-check-label" htmlFor="audioEnabled">
                     Enable audio device

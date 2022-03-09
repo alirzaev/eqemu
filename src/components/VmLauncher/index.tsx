@@ -23,25 +23,19 @@ const ShellList: Array<{ text: string; value: Shell }> = [
 ];
 
 export function VmLauncher() {
-    const shell = useAppSelector(state => state.launcher.shell);
+    const { shell } = useAppSelector(state => state.launcher);
     const { vm: config, system } = useAppSelector(state => state);
     const dispatch = useAppDispatch();
-
-    const onChangeShellHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value as Shell;
-
-        dispatch(setShell(value));
-    };
 
     const delimeter = getShellMultilineDelimeter(shell);
     const qemuArgs = buildQemuCmdArgs(config, system);
     const script = qemuArgs.join(` ${delimeter}\n`);
 
-    const onClickCopyButtonHandler = () => {
+    const copyToClipboard = () => {
         navigator.clipboard.writeText(script);
     };
 
-    const onClickLaunchButtonHandler = () => {
+    const launchVm = () => {
         electron.vmManager.launchVm(qemuArgs.slice(1));
     };
 
@@ -58,7 +52,7 @@ export function VmLauncher() {
                                 type="radio"
                                 name="delimeter"
                                 value={value}
-                                onChange={onChangeShellHandler}
+                                onChange={event => dispatch(setShell(event.target.value as Shell))}
                                 checked={shell == value}
                             />
                             <label htmlFor={`delimeter${value}`} className="form-check-label">
@@ -72,13 +66,13 @@ export function VmLauncher() {
                     <button
                         type="button"
                         className="btn btn-outline-primary btn-sm launcher-script-btn-clipboard"
-                        onClick={onClickCopyButtonHandler}
+                        onClick={copyToClipboard}
                     >
                         Copy
                     </button>
                 </div>
                 <div className="launcher-panel">
-                    <button type="button" className="btn btn-primary" onClick={onClickLaunchButtonHandler}>
+                    <button type="button" className="btn btn-primary" onClick={launchVm}>
                         Launch VM
                     </button>
                 </div>

@@ -4,14 +4,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setSpiceAgentEnabled } from '../store/slices/vm';
 
 export function SpiceAgent() {
-    const enabled = useAppSelector(state => state.vm.spiceAgent.enabled);
+    const { enabled } = useAppSelector(state => state.vm.spiceAgent);
     const dispatch = useAppDispatch();
-
-    const onChangeEnabledHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.checked;
-
-        dispatch(setSpiceAgentEnabled(value));
-    };
 
     return (
         <div>
@@ -21,7 +15,7 @@ export function SpiceAgent() {
                     className="form-check-input"
                     type="checkbox"
                     checked={enabled}
-                    onChange={onChangeEnabledHandler}
+                    onChange={event => dispatch(setSpiceAgentEnabled(event.target.checked))}
                 />
                 <label className="form-check-label" htmlFor="spiceAgentEnabled">
                     Enable SPICE agent

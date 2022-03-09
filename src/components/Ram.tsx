@@ -8,12 +8,6 @@ export function Ram() {
     const memory = useAppSelector(state => state.vm.memory);
     const dispatch = useAppDispatch();
 
-    const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Number.parseInt(event.target.value);
-
-        dispatch(setMemory(value));
-    };
-
     return (
         <div>
             <label htmlFor="memory" className="form-label">
@@ -25,7 +19,7 @@ export function Ram() {
                     type="number"
                     className="form-control"
                     value={memory}
-                    onChange={onChangeHandler}
+                    onChange={event => dispatch(setMemory(Number.parseInt(event.target.value)))}
                     min="1"
                     max={system.memory}
                 />

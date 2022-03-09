@@ -32,21 +32,20 @@ const GraphicsCardList: Array<{ text: string; value: GraphicsCardEnum }> = [
 ];
 
 export function GraphicsCard() {
-    const card = useAppSelector(state => state.vm.graphics.card);
+    const { card } = useAppSelector(state => state.vm.graphics);
     const dispatch = useAppDispatch();
-
-    const onChangeBootDeviceHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value as GraphicsCardEnum;
-
-        dispatch(setGraphicsCard(value));
-    };
 
     return (
         <div>
             <label htmlFor="graphicsCard" className="form-label">
                 Graphics card
             </label>
-            <select id="graphicsCard" className="form-select" value={card} onChange={onChangeBootDeviceHandler}>
+            <select
+                id="graphicsCard"
+                className="form-select"
+                value={card}
+                onChange={event => dispatch(setGraphicsCard(event.target.value as GraphicsCardEnum))}
+            >
                 {GraphicsCardList.map(({ text, value }) => (
                     <option key={value} value={value}>
                         {text}

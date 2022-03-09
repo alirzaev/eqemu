@@ -7,16 +7,6 @@ export function HardDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.drive);
     const dispatch = useAppDispatch();
 
-    const onChangeEnabledHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.checked;
-
-        dispatch(setHardDriveEnabled(value));
-    };
-
-    const onClickSelectHandler = () => {
-        dispatch(setHardDrivePath());
-    };
-
     return (
         <div>
             <label htmlFor="drivePath" className="form-label">
@@ -27,7 +17,7 @@ export function HardDrive() {
                 <button
                     className="btn btn-outline-primary"
                     type="button"
-                    onClick={onClickSelectHandler}
+                    onClick={() => dispatch(setHardDrivePath())}
                     disabled={!enabled}
                 >
                     Select
@@ -40,7 +30,7 @@ export function HardDrive() {
                         className="form-check-input"
                         type="checkbox"
                         checked={enabled}
-                        onChange={onChangeEnabledHandler}
+                        onChange={event => dispatch(setHardDriveEnabled(event.target.checked))}
                     />
                     <label className="form-check-label" htmlFor="driveEnabled">
                         Enabled

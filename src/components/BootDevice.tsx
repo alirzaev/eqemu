@@ -20,21 +20,20 @@ const BootDeviceList: Array<{ text: string; value: BootDeviceEnum }> = [
 ];
 
 export function BootDevice() {
-    const bootDevice = useAppSelector(state => state.vm.bootDevice);
+    const { bootDevice } = useAppSelector(state => state.vm);
     const dispatch = useAppDispatch();
-
-    const onChangeBootDeviceHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value as BootDeviceEnum;
-
-        dispatch(setBootDevice(value));
-    };
 
     return (
         <div>
             <label htmlFor="bootDevice" className="form-label">
                 Boot device
             </label>
-            <select id="bootDevice" className="form-select" value={bootDevice} onChange={onChangeBootDeviceHandler}>
+            <select
+                id="bootDevice"
+                className="form-select"
+                value={bootDevice}
+                onChange={event => dispatch(setBootDevice(event.target.value as BootDeviceEnum))}
+            >
                 {BootDeviceList.map(({ text, value }) => (
                     <option key={value} value={value}>
                         {text}

@@ -4,14 +4,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setNetworkEnabled } from '../store/slices/vm';
 
 export function NetworkSettings() {
-    const enabled = useAppSelector(state => state.vm.network.enabled);
+    const {enabled} = useAppSelector(state => state.vm.network);
     const dispatch = useAppDispatch();
-
-    const onChangeEnabledHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.checked;
-
-        dispatch(setNetworkEnabled(value));
-    };
 
     return (
         <div>
@@ -21,7 +15,7 @@ export function NetworkSettings() {
                     className="form-check-input"
                     type="checkbox"
                     checked={enabled}
-                    onChange={onChangeEnabledHandler}
+                    onChange={event => dispatch(setNetworkEnabled(event.target.checked))}
                 />
                 <label className="form-check-label" htmlFor="networkingEnabled">
                     Enable networking
