@@ -34,10 +34,15 @@ export function VmLauncher() {
     };
 
     const delimeter = getShellMultilineDelimeter(shell);
-    const script = buildQemuCmdArgs(config, system).join(` ${delimeter}\n`);
+    const qemuArgs = buildQemuCmdArgs(config, system);
+    const script = qemuArgs.join(` ${delimeter}\n`);
 
     const onClickCopyButtonHandler = () => {
         navigator.clipboard.writeText(script);
+    };
+
+    const onClickLaunchButtonHandler = () => {
+        electron.vmManager.launchVm(qemuArgs.slice(1));
     };
 
     return (
@@ -73,7 +78,7 @@ export function VmLauncher() {
                     </button>
                 </div>
                 <div className="launcher-panel">
-                    <button type="button" className="btn btn-primary">
+                    <button type="button" className="btn btn-primary" onClick={onClickLaunchButtonHandler}>
                         Launch VM
                     </button>
                 </div>
