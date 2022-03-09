@@ -1,9 +1,15 @@
 import settings from 'electron-settings';
 import os from 'os';
+import { join } from 'path';
 import { ipcMain, dialog } from 'electron';
 import { readFile, writeFile } from 'fs/promises';
-import { spawn } from 'child_process';
+import { execFile, spawn } from 'child_process';
 import {
+    DIALOG_SHOW_OPEN,
+    SETTINGS_GET_KEY,
+    SETTINGS_OPEN,
+    SETTINGS_SET_KEY,
+    SYSTEM_CHECK_QEMU,
     SYSTEM_REQUEST_INFO,
     VM_LAUNCH,
     VM_LOAD_CONFIG,
@@ -61,28 +67,18 @@ export const onVmRequestCdromPath = (window: Electron.BrowserWindow) => {
 
 export const onVmLaunch = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_LAUNCH, async (_event, args) => {
-        let qemuSystemExecutablePath = await settings.get('qemu.system.path');
+        const qemuPath = (await settings.get('qemu.system.path')) as string;
 
-        if (!qemuSystemExecutablePath) {
+        if (!qemuPath) {
             await dialog.showMessageBox(window, {
                 title: '',
-                message: "Please provide the path to 'qemu-system-x86_64' executable",
+                message: 'Please specify the path to the QEMU folder in the settings',
             });
-
-            const path = await dialog.showOpenDialog(window, {
-                properties: ['openFile'],
-            });
-
-            if (!path.canceled) {
-                qemuSystemExecutablePath = path.filePaths[0];
-
-                await settings.set('qemu.system.path', qemuSystemExecutablePath);
-            } else {
-                return;
-            }
         }
 
-        spawn(`"${qemuSystemExecutablePath}"`, args, {
+        const qemuExecutablePath = join(qemuPath, 'qemu-system-x86_64');
+
+        spawn(`"${qemuExecutablePath}"`, args, {
             detached: true,
             shell: true,
         }).unref();
@@ -98,6 +94,27 @@ export const onSystemRequestInfo = () => {
         };
 
         return JSON.parse(JSON.stringify(info));
+    });
+};
+
+export const onSystemCheckQemu = () => {
+    ipcMain.handle(SYSTEM_CHECK_QEMU, (_event, qemuPath: string) => {
+        return new Promise(resolve => {
+            execFile(
+                join(qemuPath, 'qemu-system-x86_64'),
+                ['--version'],
+                {
+                    windowsHide: true,
+                },
+                (error, stdout, stderr) => {
+                    if (error) {
+                        resolve([error, stderr]);
+                    } else {
+                        resolve([null, stdout]);
+                    }
+                }
+            );
+        });
     });
 };
 
@@ -118,4 +135,29 @@ export const onMenuVmLoadConfig = (window: Electron.BrowserWindow) => async () =
 
 export const onMenuVmSaveConfig = (window: Electron.BrowserWindow) => async () => {
     window.webContents.send(VM_REQUEST_CONFIG);
+};
+
+export const onMenuSettingsOpen = (window: Electron.BrowserWindow) => async () => {
+    window.webContents.send(SETTINGS_OPEN);
+};
+
+export const onSettingsGetKey = () => {
+    ipcMain.handle(SETTINGS_GET_KEY, (_event: Electron.IpcMainInvokeEvent, keyPath: string) => {
+        return settings.get(keyPath);
+    });
+};
+
+export const onSettingsSetKey = () => {
+    ipcMain.handle(SETTINGS_SET_KEY, (_event: Electron.IpcMainInvokeEvent, keyPath: string, value) => {
+        return settings.set(keyPath, value);
+    });
+};
+
+export const onShowOpenDialog = (window: Electron.BrowserWindow) => {
+    ipcMain.handle(
+        DIALOG_SHOW_OPEN,
+        (_event: Electron.IpcMainInvokeEvent, dialogOptions: Electron.OpenDialogOptions) => {
+            return dialog.showOpenDialog(window, dialogOptions);
+        }
+    );
 };

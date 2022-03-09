@@ -2,7 +2,8 @@ import { app, Menu, shell } from 'electron';
 
 export function createApplicationMenu(
     loadVmConfigCallback: () => Promise<void>,
-    saveVmConfigCallback: () => Promise<void>
+    saveVmConfigCallback: () => Promise<void>,
+    openSettingsCallback: () => Promise<void>
 ) {
     const isMac = process.platform === 'darwin';
 
@@ -32,6 +33,7 @@ export function createApplicationMenu(
             submenu: [
                 { label: 'Open', accelerator: 'CommandOrControl+O', click: loadVmConfigCallback },
                 { label: 'Save', accelerator: 'CommandOrControl+S', click: saveVmConfigCallback },
+                { type: 'separator' },
                 isMac ? { role: 'close' } : { role: 'quit' },
             ],
         },
@@ -61,6 +63,8 @@ export function createApplicationMenu(
                           { type: 'separator' },
                           { role: 'selectAll' },
                       ] as Electron.MenuItemConstructorOptions[])),
+                { type: 'separator' },
+                { label: 'Settings', accelerator: 'CommandOrControl+,', click: openSettingsCallback },
             ],
         },
         // { role: 'viewMenu' }

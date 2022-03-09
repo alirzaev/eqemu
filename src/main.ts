@@ -31,7 +31,8 @@ const createWindow = () => {
 
     const menu = createApplicationMenu(
         handlers.onMenuVmLoadConfig(mainWindow),
-        handlers.onMenuVmSaveConfig(mainWindow)
+        handlers.onMenuVmSaveConfig(mainWindow),
+        handlers.onMenuSettingsOpen(mainWindow)
     );
 
     Menu.setApplicationMenu(menu);
@@ -40,7 +41,14 @@ const createWindow = () => {
     handlers.onVmRequestCdromPath(mainWindow);
     handlers.onVmRequestConfigValue(mainWindow);
     handlers.onVmLaunch(mainWindow);
+
     handlers.onSystemRequestInfo();
+    handlers.onSystemCheckQemu();
+
+    handlers.onSettingsGetKey();
+    handlers.onSettingsSetKey();
+
+    handlers.onShowOpenDialog(mainWindow);
 };
 
 // This method will be called when Electron has finished

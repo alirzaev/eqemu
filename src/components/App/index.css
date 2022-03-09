@@ -9,9 +9,12 @@
     margin: 1rem;
 }
 
-.app-launcher-wrapper,
-.app-vm-config-wrapper {
+.app-child-wrapper {
     flex-grow: 1;
     padding: 0;
     width: 100%;
+}
+
+.app-child-wrapper > * {
+    height: 100%;
 }

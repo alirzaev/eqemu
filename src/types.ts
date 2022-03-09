@@ -18,6 +18,15 @@ export interface ElectronBridge {
     };
     system: {
         requestInfo: () => Promise<SystemInfo>;
+        checkQemu: (qemuPath: string) => Promise<[Error | null, string]>;
+    };
+    settings: {
+        onOpenSettings: (callback: (event: Electron.IpcRendererEvent) => void) => void;
+        getSettingsKey: (keyPath: string) => Promise<unknown>;
+        setSettingsKey: (keyPath: string, value: unknown) => Promise<void>;
+    };
+    dialog: {
+        showOpenDialog: (dialogOption: Electron.OpenDialogOptions) => Promise<Electron.OpenDialogReturnValue>;
     };
 }
 
@@ -53,5 +62,12 @@ export interface VmConfig {
         ticketing: boolean;
         password: string;
         usbRedirection: boolean;
+    };
+}
+
+export interface ApplicationSettings {
+    qemu: {
+        path: string;
+        status: 'valid' | 'pending' | 'invalid';
     };
 }

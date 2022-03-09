@@ -1,0 +1,33 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.settings-header {
+    position: relative;
+    min-height: 36px;
+}
+
+.settings-header > h1 {
+    font-size: 1rem;
+}
+
+.settings-spinner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.settings-main {
+    flex-grow: 1;
+}
+
+.settings-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
