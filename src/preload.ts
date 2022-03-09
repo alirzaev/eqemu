@@ -10,6 +10,7 @@ import {
     SETTINGS_SET_KEY,
     DIALOG_SHOW_OPEN,
     SYSTEM_CHECK_QEMU,
+    DIALOG_SHOW_MESSAGE_BOX,
 } from './ipc/signals';
 import { ElectronBridge } from './types';
 
@@ -49,6 +50,9 @@ contextBridge.exposeInMainWorld('electron', {
     dialog: {
         showOpenDialog(dialogOptions) {
             return ipcRenderer.invoke(DIALOG_SHOW_OPEN, dialogOptions);
+        },
+        showMessageBox(messageBoxOptions) {
+            return ipcRenderer.invoke(DIALOG_SHOW_MESSAGE_BOX, messageBoxOptions);
         },
     },
 } as ElectronBridge);

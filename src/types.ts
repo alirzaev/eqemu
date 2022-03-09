@@ -1,3 +1,5 @@
+import * as rt from 'runtypes';
+
 import { BootDevice, GraphicsCard } from './enums';
 
 export interface SystemInfo {
@@ -25,43 +27,56 @@ export interface ElectronBridge {
     };
     dialog: {
         showOpenDialog: (dialogOption: Electron.OpenDialogOptions) => Promise<Electron.OpenDialogReturnValue>;
+        showMessageBox: (messageBoxOptions: Electron.MessageBoxOptions) => Promise<Electron.MessageBoxReturnValue>;
     };
 }
 
-export interface VmConfig {
-    memory: number;
-    cpu: {
-        cores: number;
-    };
-    cdrom: {
-        enabled: boolean;
-        path: string;
-    };
-    drive: {
-        enabled: boolean;
-        path: string;
-    };
-    bootDevice: BootDevice;
-    graphics: {
-        card: GraphicsCard;
-    };
-    audio: {
-        enabled: boolean;
-    };
-    network: {
-        enabled: boolean;
-    };
-    spiceAgent: {
-        enabled: boolean;
-    };
-    spiceServer: {
-        enabled: boolean;
-        port: number;
-        ticketing: boolean;
-        password: string;
-        usbRedirection: boolean;
-    };
+function RuntypeEnum<E>(e: Record<string, E>): rt.Runtype<E> {
+    const values = Object.values<unknown>(e);
+
+    const isEnumValue = (input: unknown): input is E => values.includes(input);
+    const errorMessage = (input: unknown): string =>
+        `Failed constraint check. Expected one of ${JSON.stringify(values)}, but received ${JSON.stringify(input)}`;
+
+    return rt.Unknown.withConstraint<E>(object => isEnumValue(object) || errorMessage(object));
 }
+
+export const VmConfigRuntype = rt.Record({
+    memory: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 1),
+    cpu: rt.Record({
+        cores: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 1 && v <= 4),
+    }),
+    cdrom: rt.Record({
+        enabled: rt.Boolean,
+        path: rt.String,
+    }),
+    drive: rt.Record({
+        enabled: rt.Boolean,
+        path: rt.String,
+    }),
+    bootDevice: RuntypeEnum(BootDevice),
+    graphics: rt.Record({
+        card: RuntypeEnum(GraphicsCard),
+    }),
+    audio: rt.Record({
+        enabled: rt.Boolean,
+    }),
+    network: rt.Record({
+        enabled: rt.Boolean,
+    }),
+    spiceAgent: rt.Record({
+        enabled: rt.Boolean,
+    }),
+    spiceServer: rt.Record({
+        enabled: rt.Boolean,
+        port: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 0 && v <= 65535),
+        ticketing: rt.Boolean,
+        password: rt.String,
+        usbRedirection: rt.Boolean,
+    }),
+});
+
+export type VmConfig = rt.Static<typeof VmConfigRuntype>;
 
 export interface ApplicationSettings {
     qemu: {

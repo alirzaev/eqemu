@@ -16,6 +16,7 @@ import {
     VM_LOAD_CONFIG,
     VM_EXPORT_CONFIG,
     VM_EXPORT_CONFIG_VALUE,
+    DIALOG_SHOW_MESSAGE_BOX,
 } from './signals';
 
 export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
@@ -121,5 +122,11 @@ export const onSettingsSetKey = () => {
 export const onShowOpenDialog = (window: Electron.BrowserWindow) => {
     ipcMain.handle(DIALOG_SHOW_OPEN, (_event, dialogOptions: Electron.OpenDialogOptions) => {
         return dialog.showOpenDialog(window, dialogOptions);
+    });
+};
+
+export const onShowMessageBox = (window: Electron.BrowserWindow) => {
+    ipcMain.handle(DIALOG_SHOW_MESSAGE_BOX, (_event, messageBoxOptions: Electron.MessageBoxOptions) => {
+        return dialog.showMessageBox(window, messageBoxOptions);
     });
 };

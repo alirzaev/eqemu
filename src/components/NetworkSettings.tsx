@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setNetworkEnabled } from '../store/slices/vm';
 
 export function NetworkSettings() {
-    const {enabled} = useAppSelector(state => state.vm.network);
+    const { enabled } = useAppSelector(state => state.vm.network);
     const dispatch = useAppDispatch();
 
     return (

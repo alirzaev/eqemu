@@ -1,5 +1,5 @@
 import { DiskImageFormat, Shell } from './enums';
-import { SystemInfo, VmConfig } from './types';
+import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
@@ -106,5 +106,16 @@ export function getShellMultilineDelimeter(shell: Shell): string {
             return '`';
         case Shell.Bash:
             return '\\';
+    }
+}
+
+export function parseVmConfig(data: string): VmConfig | null {
+    try {
+        const json = JSON.parse(data);
+        const config = VmConfigRuntype.check(json);
+
+        return config;
+    } catch (e) {
+        return null;
     }
 }

@@ -9,4 +9,6 @@ export const SYSTEM_CHECK_QEMU = 'system:check-qemu';
 export const SETTINGS_OPEN = 'settings:open';
 export const SETTINGS_GET_KEY = 'settings:get-key';
 export const SETTINGS_SET_KEY = 'settings:set-key';
+
 export const DIALOG_SHOW_OPEN = 'dialog:show-open';
+export const DIALOG_SHOW_MESSAGE_BOX = 'dialog:show-message-box';

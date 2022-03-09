@@ -4,6 +4,7 @@ import { RootState } from '..';
 import { BootDevice, GraphicsCard } from '../../enums';
 import { VM_EXPORT_CONFIG_VALUE } from '../../ipc/signals';
 import { VmConfig } from '../../types';
+import { parseVmConfig } from '../../utils';
 
 type VmState = VmConfig;
 
@@ -76,6 +77,21 @@ export const sendConfigToMainProcess = createAsyncThunk<
     event.sender.send(VM_EXPORT_CONFIG_VALUE, JSON.stringify(vm));
 });
 
+export const loadVmConfig = createAsyncThunk('vm/loadConfig', async (data: string): Promise<VmConfig | null> => {
+    const config = parseVmConfig(data);
+
+    if (!config) {
+        await electron.dialog.showMessageBox({
+            title: 'Error',
+            message: 'Failed to load VM: invalid configuration file',
+        });
+
+        return null;
+    }
+
+    return config;
+});
+
 export const vmSlice = createSlice({
     name: 'vm',
     initialState,
@@ -125,9 +141,23 @@ export const vmSlice = createSlice({
         setSpiceServerUsbRedirection: (state: VmState, action: PayloadAction<boolean>) => {
             state.spiceServer.usbRedirection = action.payload;
         },
-        loadVmConfig: (state: VmState, action: PayloadAction<string>) => {
+    },
+    extraReducers: builder => {
+        builder.addCase(setOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
+            state.cdrom.path = action.payload;
+        });
+
+        builder.addCase(setHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
+            state.drive.path = action.payload;
+        });
+
+        builder.addCase(loadVmConfig.fulfilled, (state: VmState, action: PayloadAction<VmConfig | null>) => {
+            if (!action.payload) {
+                return;
+            }
+
             const { audio, bootDevice, cdrom, cpu, drive, graphics, memory, network, spiceAgent, spiceServer } =
-                JSON.parse(action.payload) as VmConfig;
+                action.payload;
 
             state.audio = audio;
             state.bootDevice = bootDevice;
@@ -139,15 +169,6 @@ export const vmSlice = createSlice({
             state.network = network;
             state.spiceAgent = spiceAgent;
             state.spiceServer = spiceServer;
-        },
-    },
-    extraReducers: builder => {
-        builder.addCase(setOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
-            state.cdrom.path = action.payload;
-        });
-
-        builder.addCase(setHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
-            state.drive.path = action.payload;
         });
     },
 });
@@ -167,7 +188,6 @@ export const {
     setSpiceServerTicketing,
     setSpiceServerPassword,
     setSpiceServerUsbRedirection,
-    loadVmConfig,
 } = vmSlice.actions;
 
 export default vmSlice.reducer;

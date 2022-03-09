@@ -48,6 +48,7 @@ const createWindow = () => {
     handlers.onSettingsSetKey();
 
     handlers.onShowOpenDialog(mainWindow);
+    handlers.onShowMessageBox(mainWindow);
 };
 
 // This method will be called when Electron has finished
