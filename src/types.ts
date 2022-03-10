@@ -1,3 +1,4 @@
+import type { ExecFileException } from 'child_process';
 import * as rt from 'runtypes';
 
 import { BootDevice, GraphicsCard } from './enums';
@@ -18,7 +19,7 @@ export interface ElectronBridge {
     };
     system: {
         getInfo: () => Promise<SystemInfo>;
-        checkQemu: (qemuPath: string) => Promise<[Error | null, string]>;
+        checkQemu: (qemuPath: string) => Promise<QemuCheckResult>;
     };
     settings: {
         onOpenSettings: (callback: (event: Electron.IpcRendererEvent) => void) => void;
@@ -78,9 +79,19 @@ export const VmConfigRuntype = rt.Record({
 
 export type VmConfig = rt.Static<typeof VmConfigRuntype>;
 
+export type QemuCheckStatus = 'valid' | 'pending' | 'invalid';
+
+export interface QemuCheckResult {
+    QemuSystemx86_64: ExecFileException | string;
+    QemuImg: ExecFileException | string;
+}
+
 export interface ApplicationSettings {
     qemu: {
         path: string;
-        status: 'valid' | 'pending' | 'invalid';
+        status: {
+            QemuSystemx86_64: QemuCheckStatus;
+            QemuImg: QemuCheckStatus;
+        };
     };
 }

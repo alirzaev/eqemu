@@ -3,7 +3,7 @@ import os from 'os';
 import { join } from 'path';
 import { ipcMain, dialog } from 'electron';
 import { readFile, writeFile } from 'fs/promises';
-import { execFile, spawn } from 'child_process';
+import { execFile, spawn, ExecFileException } from 'child_process';
 
 import {
     DIALOG_SHOW_OPEN,
@@ -18,6 +18,7 @@ import {
     VM_EXPORT_CONFIG_VALUE,
     DIALOG_SHOW_MESSAGE_BOX,
 } from './signals';
+import { QemuCheckResult } from '../types';
 
 export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_EXPORT_CONFIG_VALUE, async (_event, config) => {
@@ -64,23 +65,33 @@ export const onSystemGetInfo = () => {
 };
 
 export const onSystemCheckQemu = () => {
-    ipcMain.handle(SYSTEM_CHECK_QEMU, (_event, qemuPath: string) => {
-        return new Promise(resolve => {
-            execFile(
-                join(qemuPath, 'qemu-system-x86_64'),
-                ['--version'],
-                {
-                    windowsHide: true,
-                },
-                (error, stdout, stderr) => {
-                    if (error) {
-                        resolve([error, stderr]);
-                    } else {
-                        resolve([null, stdout]);
-                    }
-                }
-            );
-        });
+    ipcMain.handle(SYSTEM_CHECK_QEMU, async (_event, qemuPath: string): Promise<QemuCheckResult> => {
+        const [QemuSystemx86_64, QemuImg] = await Promise.all(
+            ['qemu-system-x86_64', 'qemu-img'].map(
+                file =>
+                    new Promise<ExecFileException | string>(resolve => {
+                        execFile(
+                            join(qemuPath, file),
+                            ['--version'],
+                            {
+                                windowsHide: true,
+                            },
+                            (error, stdout) => {
+                                if (error) {
+                                    resolve(error);
+                                } else {
+                                    resolve(stdout);
+                                }
+                            }
+                        );
+                    })
+            )
+        );
+
+        return {
+            QemuSystemx86_64,
+            QemuImg,
+        };
     });
 };
 

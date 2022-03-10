@@ -4,8 +4,19 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loadSettings, updateQemuPath } from '../../store/slices/settings';
 import { setWindowActiveView } from '../../store/slices/window';
+import { QemuCheckStatus } from '../../types';
 
 import './index.css';
+
+export function QemuStatus({ title, status }: { title: string; status: QemuCheckStatus }) {
+    return (
+        <div>
+            {status === 'valid' && <span className="text-success">{title}: OK</span>}
+            {status === 'invalid' && <span className="text-danger">{title}: Doesn't work</span>}
+            {status === 'pending' && <span className="text-secondary">{title}: Checking...</span>}
+        </div>
+    );
+}
 
 export function Settings() {
     const { loaded, qemu } = useAppSelector(state => state.settings);
@@ -38,16 +49,13 @@ export function Settings() {
                             className="btn btn-outline-primary"
                             type="button"
                             onClick={() => dispatch(updateQemuPath())}
-                            disabled={qemu.status === 'pending'}
+                            disabled={qemu.status.QemuSystemx86_64 === 'pending' || qemu.status.QemuImg === 'pending'}
                         >
                             Select
                         </button>
                     </div>
-                    {qemu.status === 'valid' && <span className="text-success">qemu-system-x86_64: OK</span>}
-                    {qemu.status === 'invalid' && <span className="text-danger">qemu-system-x86_64: Doesn't work</span>}
-                    {qemu.status === 'pending' && (
-                        <span className="text-secondary">qemu-system-x86_64: Checking...</span>
-                    )}
+                    <QemuStatus title="qemu-system-x86_64" status={qemu.status.QemuSystemx86_64} />
+                    <QemuStatus title="qemu-img" status={qemu.status.QemuImg} />
                 </div>
             )}
             <div className="settings-footer">
