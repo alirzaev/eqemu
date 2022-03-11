@@ -1,6 +1,6 @@
 import settings from 'electron-settings';
 import os from 'os';
-import { join } from 'path';
+import { extname, join } from 'path';
 import { ipcMain, dialog } from 'electron';
 import { readFile, writeFile } from 'fs/promises';
 import { execFile, spawn, ExecFileException } from 'child_process';
@@ -25,12 +25,13 @@ import { DiskImageFormat } from '../enums';
 
 export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_EXPORT_CONFIG_VALUE, async (_event, config) => {
-        const path = await dialog.showSaveDialog(window, {
+        const result = await dialog.showSaveDialog(window, {
             filters: [{ name: 'JSON', extensions: ['json'] }],
         });
 
-        if (!path.canceled && path.filePath) {
-            await writeFile(path.filePath, config, { encoding: 'utf-8' });
+        if (!result.canceled && result.filePath) {
+            const path = extname(result.filePath) === '.json' ? result.filePath : `${result.filePath}.json`;
+            await writeFile(path, config, { encoding: 'utf-8' });
         }
     });
 };
