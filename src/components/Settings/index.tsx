@@ -49,13 +49,13 @@ export function Settings() {
                             className="btn btn-outline-primary"
                             type="button"
                             onClick={() => dispatch(updateQemuPath())}
-                            disabled={qemu.status.QemuSystemx86_64 === 'pending' || qemu.status.QemuImg === 'pending'}
+                            disabled={qemu.status.qemuSystem === 'pending' || qemu.status.qemuImg === 'pending'}
                         >
                             Select
                         </button>
                     </div>
-                    <QemuStatus title="qemu-system-x86_64" status={qemu.status.QemuSystemx86_64} />
-                    <QemuStatus title="qemu-img" status={qemu.status.QemuImg} />
+                    <QemuStatus title="qemu-system-x86_64" status={qemu.status.qemuSystem} />
+                    <QemuStatus title="qemu-img" status={qemu.status.qemuImg} />
                 </div>
             )}
             <div className="settings-footer">

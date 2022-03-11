@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setOpticalDriveEnabled, setOpticalDrivePath } from '../store/slices/vm';
+import { setOpticalDriveEnabled, selectOpticalDrivePath } from '../store/slices/vm';
 
 export function OpticalDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.cdrom);
@@ -17,7 +17,7 @@ export function OpticalDrive() {
                 <button
                     className="btn btn-outline-primary"
                     type="button"
-                    onClick={() => dispatch(setOpticalDrivePath())}
+                    onClick={() => dispatch(selectOpticalDrivePath())}
                     disabled={!enabled}
                 >
                     Select

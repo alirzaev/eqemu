@@ -84,16 +84,16 @@ export type VmConfig = rt.Static<typeof VmConfigRuntype>;
 export type QemuCheckStatus = 'valid' | 'pending' | 'invalid';
 
 export interface QemuCheckResult {
-    QemuSystemx86_64: ExecFileException | string;
-    QemuImg: ExecFileException | string;
+    qemuSystem: ExecFileException | string;
+    qemuImg: ExecFileException | string;
 }
 
 export interface ApplicationSettings {
     qemu: {
         path: string;
         status: {
-            QemuSystemx86_64: QemuCheckStatus;
-            QemuImg: QemuCheckStatus;
+            qemuSystem: QemuCheckStatus;
+            qemuImg: QemuCheckStatus;
         };
     };
 }

@@ -70,7 +70,7 @@ export const onSystemGetInfo = () => {
 
 export const onSystemCheckQemu = () => {
     ipcMain.handle(SYSTEM_CHECK_QEMU, async (_event, qemuPath: string): Promise<QemuCheckResult> => {
-        const [QemuSystemx86_64, QemuImg] = await Promise.all(
+        const [qemuSystem, qemuImg] = await Promise.all(
             ['qemu-system-x86_64', 'qemu-img'].map(
                 file =>
                     new Promise<ExecFileException | string>(resolve => {
@@ -93,8 +93,8 @@ export const onSystemCheckQemu = () => {
         );
 
         return {
-            QemuSystemx86_64,
-            QemuImg,
+            qemuSystem,
+            qemuImg,
         };
     });
 };

@@ -43,10 +43,10 @@ const initialState: VmState = {
     },
 };
 
-export const setOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', async () => {
+export const selectOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', async () => {
     const result = await electron.dialog.showOpenDialog({
         properties: ['openFile'],
-        filters: [{ extensions: ['iso'], name: 'ISO images' }],
+        filters: [{ extensions: ['iso'], name: 'CD-ROM images' }],
     });
 
     return !result.canceled ? result.filePaths[0] : '';
@@ -105,9 +105,6 @@ export const vmSlice = createSlice({
         setOpticalDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.cdrom.enabled = action.payload;
         },
-        setOpticalDrivePath: (state: VmState, action: PayloadAction<string>) => {
-            state.cdrom.path = action.payload;
-        },
         setHardDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.drive.enabled = action.payload;
         },
@@ -146,7 +143,7 @@ export const vmSlice = createSlice({
         },
     },
     extraReducers: builder => {
-        builder.addCase(setOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
+        builder.addCase(selectOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
             state.cdrom.path = action.payload;
         });
 

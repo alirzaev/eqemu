@@ -11,8 +11,8 @@ const initialState: SettingsState = {
     qemu: {
         path: '',
         status: {
-            QemuSystemx86_64: 'invalid',
-            QemuImg: 'invalid',
+            qemuSystem: 'invalid',
+            qemuImg: 'invalid',
         },
     },
 };
@@ -20,14 +20,13 @@ const initialState: SettingsState = {
 type QemuStatus = typeof initialState.qemu.status;
 
 async function validateQemuPath(qemuPath: string): Promise<QemuStatus> {
-    const { QemuSystemx86_64, QemuImg } = await electron.system.checkQemu(qemuPath);
+    const { qemuSystem, qemuImg } = await electron.system.checkQemu(qemuPath);
+    const QEMU_SYSTEM_RE = /^QEMU emulator version (\d+.\d+.\d+)/;
+    const QEMU_IMG_RE = /^qemu-img version (\d+.\d+.\d+)/;
 
     return {
-        QemuSystemx86_64:
-            typeof QemuSystemx86_64 === 'string' && QemuSystemx86_64.match(/^QEMU emulator version (\d+.\d+.\d+)/)
-                ? 'valid'
-                : 'invalid',
-        QemuImg: typeof QemuImg === 'string' && QemuImg.match(/^qemu-img version (\d+.\d+.\d+)/) ? 'valid' : 'invalid',
+        qemuSystem: typeof qemuSystem === 'string' && qemuSystem.match(QEMU_SYSTEM_RE) ? 'valid' : 'invalid',
+        qemuImg: typeof qemuImg === 'string' && qemuImg.match(QEMU_IMG_RE) ? 'valid' : 'invalid',
     };
 }
 
@@ -57,7 +56,7 @@ export const updateQemuPath = createAsyncThunk('settings/updateQemuPath', async 
     await electron.settings.setSettingsKey('qemu.system.path', path);
 
     dispatch(setQemuPath(path));
-    dispatch(setQemuStatus({ QemuSystemx86_64: 'pending', QemuImg: 'pending' }));
+    dispatch(setQemuStatus({ qemuSystem: 'pending', qemuImg: 'pending' }));
 
     const status = await validateQemuPath(path);
     dispatch(setQemuStatus(status));
