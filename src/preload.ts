@@ -11,6 +11,8 @@ import {
     DIALOG_SHOW_OPEN,
     SYSTEM_CHECK_QEMU,
     DIALOG_SHOW_MESSAGE_BOX,
+    DIALOG_SHOW_SAVE,
+    SYSTEM_CREATE_IMAGE,
 } from './ipc/signals';
 import { ElectronBridge } from './types';
 
@@ -35,6 +37,9 @@ contextBridge.exposeInMainWorld('electron', {
         checkQemu(qemuPath) {
             return ipcRenderer.invoke(SYSTEM_CHECK_QEMU, qemuPath);
         },
+        createImage(path, format, size) {
+            return ipcRenderer.invoke(SYSTEM_CREATE_IMAGE, path, format, size);
+        },
     },
     settings: {
         onOpenSettings(callback) {
@@ -50,6 +55,9 @@ contextBridge.exposeInMainWorld('electron', {
     dialog: {
         showOpenDialog(dialogOptions) {
             return ipcRenderer.invoke(DIALOG_SHOW_OPEN, dialogOptions);
+        },
+        showSaveDialog(dialogOptions) {
+            return ipcRenderer.invoke(DIALOG_SHOW_SAVE, dialogOptions);
         },
         showMessageBox(messageBoxOptions) {
             return ipcRenderer.invoke(DIALOG_SHOW_MESSAGE_BOX, messageBoxOptions);

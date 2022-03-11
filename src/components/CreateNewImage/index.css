@@ -1,0 +1,72 @@
+.create-new-image {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.create-new-image-header {
+    position: relative;
+    min-height: 36px;
+}
+
+.create-new-image-header > h1 {
+    font-size: 1rem;
+}
+
+.create-new-image-spinner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.create-new-image-main {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    flex-grow: 1;
+}
+
+.create-new-image-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.create-new-image-size-block {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    align-items: center;
+    gap: 1rem;
+}
+
+.create-new-image-size-range {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.create-new-image-size-range span {
+    flex-shrink: 0;
+}
+
+.create-new-image-size-numeric {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.create-new-image-status {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+}

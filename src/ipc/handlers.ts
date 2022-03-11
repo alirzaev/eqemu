@@ -17,8 +17,11 @@ import {
     VM_EXPORT_CONFIG,
     VM_EXPORT_CONFIG_VALUE,
     DIALOG_SHOW_MESSAGE_BOX,
+    DIALOG_SHOW_SAVE,
+    SYSTEM_CREATE_IMAGE,
 } from './signals';
 import { QemuCheckResult } from '../types';
+import { DiskImageFormat } from '../enums';
 
 export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_EXPORT_CONFIG_VALUE, async (_event, config) => {
@@ -95,6 +98,29 @@ export const onSystemCheckQemu = () => {
     });
 };
 
+export const onSystemCreateImage = () => {
+    ipcMain.handle(SYSTEM_CREATE_IMAGE, async (_event, path: string, format: DiskImageFormat, size: number) => {
+        const qemuPath = (await settings.get('qemu.system.path')) as string;
+
+        return new Promise<ExecFileException | string>(resolve => {
+            execFile(
+                join(qemuPath, 'qemu-img'),
+                ['create', '-f', `${format}`, path, `${size}G`],
+                {
+                    windowsHide: true,
+                },
+                (error, stdout) => {
+                    if (error) {
+                        resolve(error);
+                    } else {
+                        resolve(stdout);
+                    }
+                }
+            );
+        });
+    });
+};
+
 export const onMenuVmLoadConfig = (window: Electron.BrowserWindow) => async () => {
     const path = await dialog.showOpenDialog(window, {
         properties: ['openFile'],
@@ -133,6 +159,12 @@ export const onSettingsSetKey = () => {
 export const onShowOpenDialog = (window: Electron.BrowserWindow) => {
     ipcMain.handle(DIALOG_SHOW_OPEN, (_event, dialogOptions: Electron.OpenDialogOptions) => {
         return dialog.showOpenDialog(window, dialogOptions);
+    });
+};
+
+export const onShowSaveDialog = (window: Electron.BrowserWindow) => {
+    ipcMain.handle(DIALOG_SHOW_SAVE, (_event, dialogOptions: Electron.SaveDialogOptions) => {
+        return dialog.showSaveDialog(window, dialogOptions);
     });
 };
 

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getSystemInfo } from '../../store/slices/system';
 import { loadVmConfig, sendConfigToMainProcess } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
+import { CreateNewImage } from '../CreateNewImage';
 import { Main } from '../Main';
 import { Settings } from '../Settings';
 
@@ -35,6 +36,7 @@ export function App() {
             <div className="app-child-wrapper">
                 {activeView === 'main' && <Main />}
                 {activeView === 'settings' && <Settings />}
+                {activeView === 'create-new-image' && <CreateNewImage />}
             </div>
         </div>
     );

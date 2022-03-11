@@ -1,7 +1,7 @@
 import type { ExecFileException } from 'child_process';
 import * as rt from 'runtypes';
 
-import { BootDevice, GraphicsCard } from './enums';
+import { BootDevice, DiskImageFormat, GraphicsCard } from './enums';
 
 export interface SystemInfo {
     platform: NodeJS.Platform;
@@ -20,6 +20,7 @@ export interface ElectronBridge {
     system: {
         getInfo: () => Promise<SystemInfo>;
         checkQemu: (qemuPath: string) => Promise<QemuCheckResult>;
+        createImage: (path: string, format: DiskImageFormat, size: number) => Promise<ExecFileException | string>;
     };
     settings: {
         onOpenSettings: (callback: (event: Electron.IpcRendererEvent) => void) => void;
@@ -28,6 +29,7 @@ export interface ElectronBridge {
     };
     dialog: {
         showOpenDialog: (dialogOption: Electron.OpenDialogOptions) => Promise<Electron.OpenDialogReturnValue>;
+        showSaveDialog: (dialogOption: Electron.SaveDialogOptions) => Promise<Electron.SaveDialogReturnValue>;
         showMessageBox: (messageBoxOptions: Electron.MessageBoxOptions) => Promise<Electron.MessageBoxReturnValue>;
     };
 }

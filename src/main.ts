@@ -43,11 +43,13 @@ const createWindow = () => {
 
     handlers.onSystemGetInfo();
     handlers.onSystemCheckQemu();
+    handlers.onSystemCreateImage();
 
     handlers.onSettingsGetKey();
     handlers.onSettingsSetKey();
 
     handlers.onShowOpenDialog(mainWindow);
+    handlers.onShowSaveDialog(mainWindow);
     handlers.onShowMessageBox(mainWindow);
 };
 

@@ -52,7 +52,7 @@ export const setOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', as
     return !result.canceled ? result.filePaths[0] : '';
 });
 
-export const setHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async () => {
+export const selectHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async () => {
     const result = await electron.dialog.showOpenDialog({
         properties: ['openFile'],
         filters: [
@@ -111,6 +111,9 @@ export const vmSlice = createSlice({
         setHardDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.drive.enabled = action.payload;
         },
+        setHardDrivePath: (state: VmState, action: PayloadAction<string>) => {
+            state.drive.path = action.payload;
+        },
         setBootDevice: (state: VmState, action: PayloadAction<BootDevice>) => {
             state.bootDevice = action.payload;
         },
@@ -147,7 +150,7 @@ export const vmSlice = createSlice({
             state.cdrom.path = action.payload;
         });
 
-        builder.addCase(setHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
+        builder.addCase(selectHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
             state.drive.path = action.payload;
         });
 
@@ -178,6 +181,7 @@ export const {
     setMemory,
     setOpticalDriveEnabled,
     setHardDriveEnabled,
+    setHardDrivePath,
     setBootDevice,
     setGraphicsCard,
     setAudioEnabled,

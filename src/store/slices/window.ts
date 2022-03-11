@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type ActiveView = 'main' | 'settings';
+type ActiveView = 'main' | 'settings' | 'create-new-image';
 
 interface WindowState {
     activeView: ActiveView;

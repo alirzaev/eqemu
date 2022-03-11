@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setHardDriveEnabled, setHardDrivePath } from '../store/slices/vm';
+import { setHardDriveEnabled, selectHardDrivePath } from '../store/slices/vm';
+import { setWindowActiveView } from '../store/slices/window';
 
 export function HardDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.drive);
@@ -17,11 +18,27 @@ export function HardDrive() {
                 <button
                     className="btn btn-outline-primary"
                     type="button"
-                    onClick={() => dispatch(setHardDrivePath())}
+                    onClick={() => dispatch(selectHardDrivePath())}
                     disabled={!enabled}
                 >
                     Select
                 </button>
+                <button
+                    className="btn btn-outline-primary dropdown-toggle dropdown-toggle-split"
+                    data-bs-toggle="dropdown"
+                    disabled={!enabled}
+                ></button>
+                <ul className="dropdown-menu">
+                    <li>
+                        <a
+                            className="dropdown-item"
+                            href="#"
+                            onClick={() => dispatch(setWindowActiveView('create-new-image'))}
+                        >
+                            New
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div>
                 <div className="form-check">

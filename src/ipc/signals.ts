@@ -5,10 +5,12 @@ export const VM_LAUNCH = 'vm:launch';
 
 export const SYSTEM_GET_INFO = 'system:get-info';
 export const SYSTEM_CHECK_QEMU = 'system:check-qemu';
+export const SYSTEM_CREATE_IMAGE = 'system:create-image';
 
 export const SETTINGS_OPEN = 'settings:open';
 export const SETTINGS_GET_KEY = 'settings:get-key';
 export const SETTINGS_SET_KEY = 'settings:set-key';
 
 export const DIALOG_SHOW_OPEN = 'dialog:show-open';
+export const DIALOG_SHOW_SAVE = 'dialog:show-save';
 export const DIALOG_SHOW_MESSAGE_BOX = 'dialog:show-message-box';
