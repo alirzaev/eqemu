@@ -1,3 +1,5 @@
+import { extname } from 'path';
+
 import { DiskImageFormat, Shell } from './enums';
 import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
@@ -72,19 +74,8 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     return params;
 }
 
-export function getPathExtension(path: string): string {
-    const fileName = path.split(/[\\/]/).pop() ?? '';
-    const pos = fileName?.lastIndexOf('.') ?? -1;
-
-    if (fileName === '' || pos < 1) {
-        return '';
-    } else {
-        return fileName.slice(pos + 1);
-    }
-}
-
 export function getImageFileFormat(path: string): DiskImageFormat {
-    const extension = getPathExtension(path);
+    const extension = extname(path).slice(1);
 
     switch (extension) {
         case 'qcow2':
