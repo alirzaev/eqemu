@@ -9,10 +9,22 @@ export function OpticalDrive() {
 
     return (
         <div>
-            <label htmlFor="cdromPath" className="form-label">
-                Optical drive
+            <div className="form-check mb-2">
+                <input
+                    id="cdromEnabled"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={enabled}
+                    onChange={event => dispatch(setOpticalDriveEnabled(event.target.checked))}
+                />
+                <label className="form-check-label" htmlFor="cdromEnabled">
+                    Optical drive
+                </label>
+            </div>
+            <label htmlFor="cdromPath" className="d-none">
+                Optical drive path
             </label>
-            <div className="input-group mb-2">
+            <div className="input-group">
                 <input id="cdromPath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
                 <button
                     className="btn btn-outline-primary"
@@ -22,20 +34,6 @@ export function OpticalDrive() {
                 >
                     Select
                 </button>
-            </div>
-            <div>
-                <div className="form-check">
-                    <input
-                        id="cdromEnabled"
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={enabled}
-                        onChange={event => dispatch(setOpticalDriveEnabled(event.target.checked))}
-                    />
-                    <label className="form-check-label" htmlFor="cdromEnabled">
-                        Enabled
-                    </label>
-                </div>
             </div>
         </div>
     );

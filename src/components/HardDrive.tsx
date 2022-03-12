@@ -10,10 +10,22 @@ export function HardDrive() {
 
     return (
         <div>
-            <label htmlFor="drivePath" className="form-label">
-                Hard drive
+            <div className="form-check mb-2">
+                <input
+                    id="driveEnabled"
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={enabled}
+                    onChange={event => dispatch(setHardDriveEnabled(event.target.checked))}
+                />
+                <label className="form-check-label" htmlFor="driveEnabled">
+                    Hard drive
+                </label>
+            </div>
+            <label htmlFor="drivePath" className="d-none">
+                Hard drive path
             </label>
-            <div className="input-group mb-2">
+            <div className="input-group">
                 <input id="drivePath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
                 <button
                     className="btn btn-outline-primary"
@@ -39,20 +51,6 @@ export function HardDrive() {
                         </a>
                     </li>
                 </ul>
-            </div>
-            <div>
-                <div className="form-check">
-                    <input
-                        id="driveEnabled"
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={enabled}
-                        onChange={event => dispatch(setHardDriveEnabled(event.target.checked))}
-                    />
-                    <label className="form-check-label" htmlFor="driveEnabled">
-                        Enabled
-                    </label>
-                </div>
             </div>
         </div>
     );
