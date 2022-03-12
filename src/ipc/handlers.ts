@@ -3,6 +3,7 @@ import os from 'os';
 import { extname, join } from 'path';
 import { ipcMain, dialog } from 'electron';
 import { readFile, writeFile } from 'fs/promises';
+import { promisify } from 'util';
 import { execFile, spawn, ExecFileException } from 'child_process';
 
 import {
@@ -69,33 +70,23 @@ export const onSystemGetInfo = () => {
 };
 
 export const onSystemCheckQemu = () => {
-    ipcMain.handle(SYSTEM_CHECK_QEMU, async (_event, qemuPath: string): Promise<QemuCheckResult> => {
-        const [qemuSystem, qemuImg] = await Promise.all(
-            ['qemu-system-x86_64', 'qemu-img'].map(
-                file =>
-                    new Promise<ExecFileException | string>(resolve => {
-                        execFile(
-                            join(qemuPath, file),
-                            ['--version'],
-                            {
-                                windowsHide: true,
-                            },
-                            (error, stdout) => {
-                                if (error) {
-                                    resolve(error);
-                                } else {
-                                    resolve(stdout);
-                                }
-                            }
-                        );
-                    })
-            )
-        );
+    ipcMain.handle(SYSTEM_CHECK_QEMU, (_event, qemuPath: string): Promise<QemuCheckResult> => {
+        return Promise.all(
+            ['qemu-system-x86_64', 'qemu-img'].map(async file => {
+                try {
+                    const { stdout } = await promisify(execFile)(join(qemuPath, file), ['--version'], {
+                        windowsHide: true,
+                    });
 
-        return {
+                    return stdout;
+                } catch (error) {
+                    return error as ExecFileException;
+                }
+            })
+        ).then(([qemuSystem, qemuImg]) => ({
             qemuSystem,
             qemuImg,
-        };
+        }));
     });
 };
 
@@ -103,22 +94,19 @@ export const onSystemCreateImage = () => {
     ipcMain.handle(SYSTEM_CREATE_IMAGE, async (_event, path: string, format: DiskImageFormat, size: number) => {
         const qemuPath = (await settings.get('qemu.system.path')) as string;
 
-        return new Promise<ExecFileException | string>(resolve => {
-            execFile(
+        try {
+            const { stdout } = await promisify(execFile)(
                 join(qemuPath, 'qemu-img'),
                 ['create', '-f', `${format}`, path, `${size}G`],
                 {
                     windowsHide: true,
-                },
-                (error, stdout) => {
-                    if (error) {
-                        resolve(error);
-                    } else {
-                        resolve(stdout);
-                    }
                 }
             );
-        });
+
+            return stdout;
+        } catch (error) {
+            return error as ExecFileException;
+        }
     });
 };
 
