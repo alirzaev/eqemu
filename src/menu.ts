@@ -102,9 +102,15 @@ export function createApplicationMenu(
             role: 'help',
             submenu: [
                 {
-                    label: 'Learn More',
+                    label: 'Learn more',
                     click: async () => {
                         await shell.openExternal('https://github.com/alirzaev/eqemu');
+                    },
+                },
+                {
+                    label: 'Download SPICE tools',
+                    click: async () => {
+                        await shell.openExternal('https://www.spice-space.org/download.html');
                     },
                 },
             ],
