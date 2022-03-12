@@ -12,8 +12,11 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
         `-vga ${config.graphics.card}`,
         `-boot order=${config.bootDevice},menu=on`,
         '-usbdevice tablet',
-        '-monitor stdio',
     ];
+
+    if (system.platform === 'win32') {
+        params.push('-monitor stdio');
+    }
 
     if (system.platform === 'win32') {
         params.push('-accel hax -accel whpx,kernel-irqchip=off -accel tcg');
