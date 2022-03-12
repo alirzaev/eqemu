@@ -23,7 +23,11 @@ export function App() {
         });
 
         electron.vmConfig.onLoadConfig(async (_event, config) => {
-            dispatch(loadVmConfig(config));
+            const result = await dispatch(loadVmConfig(config));
+
+            if (result.payload) {
+                dispatch(setWindowActiveView('main'));
+            }
         });
 
         electron.settings.onOpenSettings(async () => {
