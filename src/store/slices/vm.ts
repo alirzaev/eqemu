@@ -43,16 +43,16 @@ const initialState: VmState = {
     },
 };
 
-export const selectOpticalDrivePath = createAsyncThunk('vm/setOpticalDrivePath', async () => {
+export const selectOpticalDrivePath = createAsyncThunk('vm/selectOpticalDrivePath', async () => {
     const result = await electron.dialog.showOpenDialog({
         properties: ['openFile'],
         filters: [{ extensions: ['iso'], name: 'CD-ROM images' }],
     });
 
-    return !result.canceled ? result.filePaths[0] : '';
+    return !result.canceled ? result.filePaths[0] : null;
 });
 
-export const selectHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async () => {
+export const selectHardDrivePath = createAsyncThunk('vm/selectHardDrivePath', async () => {
     const result = await electron.dialog.showOpenDialog({
         properties: ['openFile'],
         filters: [
@@ -62,7 +62,7 @@ export const selectHardDrivePath = createAsyncThunk('vm/setHardDrivePath', async
         ],
     });
 
-    return !result.canceled ? result.filePaths[0] : '';
+    return !result.canceled ? result.filePaths[0] : null;
 });
 
 export const sendConfigToMainProcess = createAsyncThunk<
@@ -143,12 +143,16 @@ export const vmSlice = createSlice({
         },
     },
     extraReducers: builder => {
-        builder.addCase(selectOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
-            state.cdrom.path = action.payload;
+        builder.addCase(selectOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string | null>) => {
+            if (action.payload) {
+                state.cdrom.path = action.payload;
+            }
         });
 
-        builder.addCase(selectHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string>) => {
-            state.drive.path = action.payload;
+        builder.addCase(selectHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string | null>) => {
+            if (action.payload) {
+                state.drive.path = action.payload;
+            }
         });
 
         builder.addCase(loadVmConfig.fulfilled, (state: VmState, action: PayloadAction<VmConfig | null>) => {
