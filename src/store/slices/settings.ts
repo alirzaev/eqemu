@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ApplicationSettings } from '../../types';
+import { QEMU_PATH_KEY } from '../../consts/settings';
 
 interface SettingsState extends ApplicationSettings {
     loaded: boolean;
@@ -30,8 +31,8 @@ async function validateQemuPath(qemuPath: string): Promise<QemuStatus> {
     };
 }
 
-export const loadSettings = createAsyncThunk('settings/load', async (): Promise<ApplicationSettings> => {
-    const qemuPath = ((await electron.settings.getSettingsKey('qemu.system.path')) as string) ?? '';
+export const loadSettings = createAsyncThunk('settings/loadSettings', async (): Promise<ApplicationSettings> => {
+    const qemuPath = ((await electron.settings.getSettingsKey(QEMU_PATH_KEY)) as string) ?? '';
     const status = await validateQemuPath(qemuPath);
 
     return {
@@ -42,37 +43,16 @@ export const loadSettings = createAsyncThunk('settings/load', async (): Promise<
     };
 });
 
-export const updateQemuPath = createAsyncThunk('settings/updateQemuPath', async (_, { dispatch }) => {
-    const result = await electron.dialog.showOpenDialog({
-        properties: ['openDirectory'],
-    });
+export const setQemuPath = createAsyncThunk<QemuStatus, string>('settings/setQemuPath', async path => {
+    await electron.settings.setSettingsKey(QEMU_PATH_KEY, path);
 
-    if (result.canceled) {
-        return null;
-    }
-
-    const path = result.filePaths[0];
-
-    await electron.settings.setSettingsKey('qemu.system.path', path);
-
-    dispatch(setQemuPath(path));
-    dispatch(setQemuStatus({ qemuSystem: 'pending', qemuImg: 'pending' }));
-
-    const status = await validateQemuPath(path);
-    dispatch(setQemuStatus(status));
+    return validateQemuPath(path);
 });
 
 export const settingsSlice = createSlice({
     name: 'settings',
     initialState,
-    reducers: {
-        setQemuStatus: (state: SettingsState, action: PayloadAction<QemuStatus>) => {
-            state.qemu.status = action.payload;
-        },
-        setQemuPath: (state: SettingsState, action: PayloadAction<string>) => {
-            state.qemu.path = action.payload;
-        },
-    },
+    reducers: {},
     extraReducers: builder => {
         builder.addCase(loadSettings.pending, (state: SettingsState) => {
             state.loaded = false;
@@ -81,9 +61,15 @@ export const settingsSlice = createSlice({
             state.qemu = action.payload.qemu;
             state.loaded = true;
         });
+
+        builder.addCase(setQemuPath.pending, (state: SettingsState, action) => {
+            state.qemu.path = action.meta.arg;
+            state.qemu.status = { qemuSystem: 'pending', qemuImg: 'pending' };
+        });
+        builder.addCase(setQemuPath.fulfilled, (state: SettingsState, action: PayloadAction<QemuStatus>) => {
+            state.qemu.status = action.payload;
+        });
     },
 });
-
-const { setQemuPath, setQemuStatus } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

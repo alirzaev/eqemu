@@ -1,11 +1,12 @@
 import { extname } from 'path';
 
+import { QEMU_SYSTEM_X86_64 } from './consts/system';
 import { DiskImageFormat, Shell } from './enums';
 import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
-        'qemu-system-x86_64',
+        QEMU_SYSTEM_X86_64,
         '-machine q35',
         `-smp ${config.cpu.cores}`,
         `-m ${config.memory}G`,

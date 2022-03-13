@@ -1,6 +1,7 @@
 import type { ExecFileException } from 'child_process';
 import * as rt from 'runtypes';
 
+import { MAX_CPU_CORES_COUNT, MAX_SPICE_SERVER_PORT, MIN_CPU_CORES_COUNT, MIN_SPICE_SERVER_PORT } from './consts/vm';
 import { BootDevice, DiskImageFormat, GraphicsCard } from './enums';
 
 export interface SystemInfo {
@@ -47,7 +48,9 @@ function RuntypeEnum<E>(e: Record<string, E>): rt.Runtype<E> {
 export const VmConfigRuntype = rt.Record({
     memory: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 1),
     cpu: rt.Record({
-        cores: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 1 && v <= 4),
+        cores: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(
+            v => v >= MIN_CPU_CORES_COUNT && v <= MAX_CPU_CORES_COUNT
+        ),
     }),
     cdrom: rt.Record({
         enabled: rt.Boolean,
@@ -72,7 +75,9 @@ export const VmConfigRuntype = rt.Record({
     }),
     spiceServer: rt.Record({
         enabled: rt.Boolean,
-        port: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(v => v >= 0 && v <= 65535),
+        port: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(
+            v => v >= MIN_SPICE_SERVER_PORT && v <= MAX_SPICE_SERVER_PORT
+        ),
         ticketing: rt.Boolean,
         password: rt.String,
         usbRedirection: rt.Boolean,

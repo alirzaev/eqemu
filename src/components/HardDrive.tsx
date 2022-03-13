@@ -1,12 +1,29 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setHardDriveEnabled, selectHardDrivePath } from '../store/slices/vm';
+import { setHardDriveEnabled, setHardDrivePath } from '../store/slices/vm';
 import { setWindowActiveView } from '../store/slices/window';
 
 export function HardDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.drive);
     const dispatch = useAppDispatch();
+
+    const selectPath = async () => {
+        const result = await electron.dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [
+                { name: 'QEMU disk image', extensions: ['qcow2'] },
+                { name: 'VMware disk image', extensions: ['vmdk'] },
+                { name: 'VirtualBox disk image', extensions: ['vdi'] },
+            ],
+        });
+
+        if (!result.canceled) {
+            const path = result.filePaths[0];
+
+            dispatch(setHardDrivePath(path));
+        }
+    };
 
     return (
         <div>
@@ -27,12 +44,7 @@ export function HardDrive() {
             </label>
             <div className="input-group">
                 <input id="drivePath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
-                <button
-                    className="btn btn-outline-primary"
-                    type="button"
-                    onClick={() => dispatch(selectHardDrivePath())}
-                    disabled={!enabled}
-                >
+                <button className="btn btn-outline-primary" type="button" onClick={selectPath} disabled={!enabled}>
                     Select
                 </button>
                 <button

@@ -9,6 +9,7 @@ import {
     setSpiceServerUsbRedirection as setUsbRedirection,
 } from '../store/slices/vm';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { MAX_SPICE_SERVER_PORT, MIN_SPICE_SERVER_PORT } from '../consts/vm';
 
 function SpiceServerEnabled() {
     const { enabled } = useAppSelector(state => state.vm.spiceServer);
@@ -83,8 +84,8 @@ function SpiceServerPort() {
                 id="spiceServerPort"
                 className="form-control"
                 type="number"
-                min="0"
-                max="65535"
+                min={MIN_SPICE_SERVER_PORT}
+                max={MAX_SPICE_SERVER_PORT}
                 value={port}
                 onChange={event => dispatch(setPort(Number.parseInt(event.target.value)))}
             />

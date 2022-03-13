@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { MIN_RAM_SIZE } from '../consts/vm';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setMemory } from '../store/slices/vm';
 
@@ -20,7 +21,7 @@ export function Ram() {
                     className="form-control"
                     value={memory}
                     onChange={event => dispatch(setMemory(Number.parseInt(event.target.value)))}
-                    min="1"
+                    min={MIN_RAM_SIZE}
                     max={system.memory}
                 />
                 <span className="input-group-text">GiB</span>

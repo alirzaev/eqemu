@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useEffect } from 'react';
 
+import { QEMU_IMG, QEMU_SYSTEM_X86_64 } from '../../consts/system';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { loadSettings, updateQemuPath } from '../../store/slices/settings';
+import { loadSettings, setQemuPath } from '../../store/slices/settings';
 import { setWindowActiveView } from '../../store/slices/window';
 import { QemuCheckStatus } from '../../types';
 
@@ -26,6 +27,18 @@ export function Settings() {
         dispatch(loadSettings());
     }, []);
 
+    const selectQemuPath = async () => {
+        const result = await electron.dialog.showOpenDialog({
+            properties: ['openDirectory'],
+        });
+
+        if (!result.canceled) {
+            const path = result.filePaths[0];
+
+            dispatch(setQemuPath(path));
+        }
+    };
+
     return (
         <div className="settings">
             <div className="settings-header">
@@ -48,14 +61,14 @@ export function Settings() {
                         <button
                             className="btn btn-outline-primary"
                             type="button"
-                            onClick={() => dispatch(updateQemuPath())}
+                            onClick={selectQemuPath}
                             disabled={qemu.status.qemuSystem === 'pending' || qemu.status.qemuImg === 'pending'}
                         >
                             Select
                         </button>
                     </div>
-                    <QemuStatus title="qemu-system-x86_64" status={qemu.status.qemuSystem} />
-                    <QemuStatus title="qemu-img" status={qemu.status.qemuImg} />
+                    <QemuStatus title={QEMU_SYSTEM_X86_64} status={qemu.status.qemuSystem} />
+                    <QemuStatus title={QEMU_IMG} status={qemu.status.qemuImg} />
                 </div>
             )}
             <div className="settings-footer">

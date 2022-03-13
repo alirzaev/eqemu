@@ -1,11 +1,24 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setOpticalDriveEnabled, selectOpticalDrivePath } from '../store/slices/vm';
+import { setOpticalDriveEnabled, setOpticalDrivePath } from '../store/slices/vm';
 
 export function OpticalDrive() {
     const { enabled, path } = useAppSelector(state => state.vm.cdrom);
     const dispatch = useAppDispatch();
+
+    const selectPath = async () => {
+        const result = await electron.dialog.showOpenDialog({
+            properties: ['openFile'],
+            filters: [{ extensions: ['iso'], name: 'CD-ROM images' }],
+        });
+
+        if (!result.canceled) {
+            const path = result.filePaths[0];
+
+            dispatch(setOpticalDrivePath(path));
+        }
+    };
 
     return (
         <div>
@@ -26,12 +39,7 @@ export function OpticalDrive() {
             </label>
             <div className="input-group">
                 <input id="cdromPath" className="form-control" type="text" value={path} disabled={!enabled} readOnly />
-                <button
-                    className="btn btn-outline-primary"
-                    type="button"
-                    onClick={() => dispatch(selectOpticalDrivePath())}
-                    disabled={!enabled}
-                >
+                <button className="btn btn-outline-primary" type="button" onClick={selectPath} disabled={!enabled}>
                     Select
                 </button>
             </div>

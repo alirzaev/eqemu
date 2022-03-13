@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { MAX_CPU_CORES_COUNT, MIN_CPU_CORES_COUNT } from '../consts/vm';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setCpuCores } from '../store/slices/vm';
 
@@ -18,8 +19,8 @@ export function Cpu() {
                 className="form-control"
                 value={cores}
                 onChange={event => dispatch(setCpuCores(Number.parseInt(event.target.value)))}
-                min="1"
-                max="4"
+                min={MIN_CPU_CORES_COUNT}
+                max={MAX_CPU_CORES_COUNT}
             />
         </div>
     );

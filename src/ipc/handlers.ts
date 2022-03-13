@@ -23,6 +23,8 @@ import {
 } from './signals';
 import { QemuCheckResult } from '../types';
 import { DiskImageFormat } from '../enums';
+import { QEMU_IMG, QEMU_SYSTEM_X86_64 } from '../consts/system';
+import { QEMU_PATH_KEY } from '../consts/settings';
 
 export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_EXPORT_CONFIG_VALUE, async (_event, config) => {
@@ -39,7 +41,7 @@ export const onVmExportConfigValue = (window: Electron.BrowserWindow) => {
 
 export const onVmLaunch = (window: Electron.BrowserWindow) => {
     ipcMain.on(VM_LAUNCH, async (_event, args) => {
-        const qemuPath = (await settings.get('qemu.system.path')) as string;
+        const qemuPath = (await settings.get(QEMU_PATH_KEY)) as string;
 
         if (!qemuPath) {
             await dialog.showMessageBox(window, {
@@ -48,7 +50,7 @@ export const onVmLaunch = (window: Electron.BrowserWindow) => {
             });
         }
 
-        const qemuExecutablePath = join(qemuPath, 'qemu-system-x86_64');
+        const qemuExecutablePath = join(qemuPath, QEMU_SYSTEM_X86_64);
 
         spawn(`"${qemuExecutablePath}"`, args, {
             detached: true,
@@ -72,7 +74,7 @@ export const onSystemGetInfo = () => {
 export const onSystemCheckQemu = () => {
     ipcMain.handle(SYSTEM_CHECK_QEMU, (_event, qemuPath: string): Promise<QemuCheckResult> => {
         return Promise.all(
-            ['qemu-system-x86_64', 'qemu-img'].map(async file => {
+            [QEMU_SYSTEM_X86_64, QEMU_IMG].map(async file => {
                 try {
                     const { stdout } = await promisify(execFile)(join(qemuPath, file), ['--version'], {
                         windowsHide: true,
@@ -92,11 +94,11 @@ export const onSystemCheckQemu = () => {
 
 export const onSystemCreateImage = () => {
     ipcMain.handle(SYSTEM_CREATE_IMAGE, async (_event, path: string, format: DiskImageFormat, size: number) => {
-        const qemuPath = (await settings.get('qemu.system.path')) as string;
+        const qemuPath = (await settings.get(QEMU_PATH_KEY)) as string;
 
         try {
             const { stdout } = await promisify(execFile)(
-                join(qemuPath, 'qemu-img'),
+                join(qemuPath, QEMU_IMG),
                 ['create', '-f', `${format}`, path, `${size}G`],
                 {
                     windowsHide: true,

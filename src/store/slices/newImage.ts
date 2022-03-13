@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { extname } from 'path';
 
 import { RootState } from '..';
-import { DiskImageFormat } from '../../enums';
 import { getImageFileFormat } from '../../utils';
 
 type Status = 'pending' | 'failed' | 'ready';
@@ -19,36 +17,8 @@ const initialState: NewImageState = {
     status: 'ready',
 };
 
-export const selectNewImagePath = createAsyncThunk<string | null, void, { state: RootState }>(
-    'newImage/selectPath',
-    async (_, { getState }) => {
-        const { newImage } = getState();
-
-        const result = await electron.dialog.showSaveDialog({
-            defaultPath: newImage.path,
-            filters: [
-                { name: 'QEMU disk image', extensions: ['qcow2'] },
-                { name: 'VMware disk image', extensions: ['vmdk'] },
-                { name: 'VirtualBox disk image', extensions: ['vdi'] },
-            ],
-        });
-
-        if (result.canceled || !result.filePath) {
-            return null;
-        }
-
-        const path = result.filePath;
-
-        if (extname(path) === '') {
-            return `${path}.${DiskImageFormat.QCow2}`;
-        } else {
-            return path;
-        }
-    }
-);
-
 export const createNewImage = createAsyncThunk<Status, void, { state: RootState }>(
-    'newImage/create',
+    'newImage/createNewImage',
     async (_, { getState }) => {
         const { path, size } = getState().newImage;
         const format = getImageFileFormat(path);
@@ -70,6 +40,9 @@ export const newImageSlice = createSlice({
         setNewImageSize: (state: NewImageState, action: PayloadAction<number>) => {
             state.size = action.payload;
         },
+        setNewImagePath: (state: NewImageState, action: PayloadAction<string>) => {
+            state.path = action.payload;
+        },
         resetNewImageState: (state: NewImageState) => {
             state.path = initialState.path;
             state.size = initialState.size;
@@ -77,12 +50,6 @@ export const newImageSlice = createSlice({
         },
     },
     extraReducers: builder => {
-        builder.addCase(selectNewImagePath.fulfilled, (state: NewImageState, action: PayloadAction<string | null>) => {
-            if (action.payload) {
-                state.path = action.payload;
-            }
-        });
-
         builder.addCase(createNewImage.pending, (state: NewImageState) => {
             state.status = 'pending';
         });
@@ -92,6 +59,6 @@ export const newImageSlice = createSlice({
     },
 });
 
-export const { setNewImageSize, resetNewImageState } = newImageSlice.actions;
+export const { setNewImageSize, setNewImagePath, resetNewImageState } = newImageSlice.actions;
 
 export default newImageSlice.reducer;

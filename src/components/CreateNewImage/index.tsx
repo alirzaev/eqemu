@@ -1,23 +1,40 @@
 import * as React from 'react';
 import { useEffect } from 'react';
+import { extname } from 'path';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectNewImagePath, setNewImageSize, createNewImage, resetNewImageState } from '../../store/slices/newImage';
+import { setNewImageSize, createNewImage, resetNewImageState, setNewImagePath } from '../../store/slices/newImage';
 import { setHardDrivePath } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
+import { DiskImageFormat } from '../../enums';
+import { MAX_NEW_IMAGE_SIZE, MIN_NEW_IMAGE_SIZE } from '../../consts/newImage';
 
 import './index.css';
 
-const MIN_IMAGE_SIZE = 0.5;
-
-const MAX_IMAGE_SIZE = 512;
-
-const IMAGE_SIZE_STEP = 0.1;
+const NEW_IMAGE_SIZE_STEP = 0.1;
 
 function ImagePath() {
     const { path, status } = useAppSelector(state => state.newImage);
     const disabled = status === 'pending';
     const dispatch = useAppDispatch();
+
+    const selectPath = async () => {
+        const result = await electron.dialog.showSaveDialog({
+            defaultPath: path,
+            filters: [
+                { name: 'QEMU disk image', extensions: ['qcow2'] },
+                { name: 'VMware disk image', extensions: ['vmdk'] },
+                { name: 'VirtualBox disk image', extensions: ['vdi'] },
+            ],
+        });
+
+        if (!result.canceled && result.filePath) {
+            let newPath = result.filePath;
+
+            newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCow2}` : newPath;
+            dispatch(setNewImagePath(newPath));
+        }
+    };
 
     return (
         <div>
@@ -33,12 +50,7 @@ function ImagePath() {
                     disabled={disabled}
                     readOnly
                 />
-                <button
-                    className="btn btn-outline-primary"
-                    type="button"
-                    onClick={() => dispatch(selectNewImagePath())}
-                    disabled={disabled}
-                >
+                <button className="btn btn-outline-primary" type="button" onClick={selectPath} disabled={disabled}>
                     Select
                 </button>
             </div>
@@ -60,27 +72,27 @@ function ImageSize() {
             </label>
             <div className="create-new-image-size-block">
                 <div className="create-new-image-size-range">
-                    <span>{MIN_IMAGE_SIZE} GiB</span>
+                    <span>{MIN_NEW_IMAGE_SIZE} GiB</span>
                     <input
                         type="range"
                         id="newImageSizeRange"
-                        min={MIN_IMAGE_SIZE}
-                        max={MAX_IMAGE_SIZE}
-                        step={IMAGE_SIZE_STEP}
+                        min={MIN_NEW_IMAGE_SIZE}
+                        max={MAX_NEW_IMAGE_SIZE}
+                        step={NEW_IMAGE_SIZE_STEP}
                         className="form-range"
                         value={size}
                         onChange={({ target }) => setSize(target.value)}
                         disabled={disabled}
                     />
-                    <span>{MAX_IMAGE_SIZE} GiB</span>
+                    <span>{MAX_NEW_IMAGE_SIZE} GiB</span>
                 </div>
                 <div className="create-new-image-size-numeric">
                     <div className="input-group">
                         <input
                             type="number"
-                            min={MIN_IMAGE_SIZE}
-                            max={MAX_IMAGE_SIZE}
-                            step={IMAGE_SIZE_STEP}
+                            min={MIN_NEW_IMAGE_SIZE}
+                            max={MAX_NEW_IMAGE_SIZE}
+                            step={NEW_IMAGE_SIZE_STEP}
                             className="form-control"
                             value={size}
                             onChange={({ target }) => setSize(target.value)}

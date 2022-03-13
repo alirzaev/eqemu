@@ -1,10 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '..';
 import { BootDevice, GraphicsCard } from '../../enums';
-import { VM_EXPORT_CONFIG_VALUE } from '../../ipc/signals';
 import { VmConfig } from '../../types';
-import { parseVmConfig } from '../../utils';
 
 type VmState = VmConfig;
 
@@ -43,55 +40,6 @@ const initialState: VmState = {
     },
 };
 
-export const selectOpticalDrivePath = createAsyncThunk('vm/selectOpticalDrivePath', async () => {
-    const result = await electron.dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters: [{ extensions: ['iso'], name: 'CD-ROM images' }],
-    });
-
-    return !result.canceled ? result.filePaths[0] : null;
-});
-
-export const selectHardDrivePath = createAsyncThunk('vm/selectHardDrivePath', async () => {
-    const result = await electron.dialog.showOpenDialog({
-        properties: ['openFile'],
-        filters: [
-            { name: 'QEMU disk image', extensions: ['qcow2'] },
-            { name: 'VMware disk image', extensions: ['vmdk'] },
-            { name: 'VirtualBox disk image', extensions: ['vdi'] },
-        ],
-    });
-
-    return !result.canceled ? result.filePaths[0] : null;
-});
-
-export const sendConfigToMainProcess = createAsyncThunk<
-    void,
-    Electron.IpcRendererEvent,
-    {
-        state: RootState;
-    }
->('vm/sendConfigToMainProcess', async (event, { getState }) => {
-    const { vm } = getState();
-
-    event.sender.send(VM_EXPORT_CONFIG_VALUE, JSON.stringify(vm));
-});
-
-export const loadVmConfig = createAsyncThunk('vm/loadConfig', async (data: string): Promise<VmConfig | null> => {
-    const config = parseVmConfig(data);
-
-    if (!config) {
-        await electron.dialog.showMessageBox({
-            title: 'Error',
-            message: 'Failed to load VM: invalid configuration file',
-        });
-
-        return null;
-    }
-
-    return config;
-});
-
 export const vmSlice = createSlice({
     name: 'vm',
     initialState,
@@ -104,6 +52,9 @@ export const vmSlice = createSlice({
         },
         setOpticalDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.cdrom.enabled = action.payload;
+        },
+        setOpticalDrivePath: (state: VmState, action: PayloadAction<string>) => {
+            state.cdrom.path = action.payload;
         },
         setHardDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.drive.enabled = action.payload;
@@ -141,25 +92,7 @@ export const vmSlice = createSlice({
         setSpiceServerUsbRedirection: (state: VmState, action: PayloadAction<boolean>) => {
             state.spiceServer.usbRedirection = action.payload;
         },
-    },
-    extraReducers: builder => {
-        builder.addCase(selectOpticalDrivePath.fulfilled, (state: VmState, action: PayloadAction<string | null>) => {
-            if (action.payload) {
-                state.cdrom.path = action.payload;
-            }
-        });
-
-        builder.addCase(selectHardDrivePath.fulfilled, (state: VmState, action: PayloadAction<string | null>) => {
-            if (action.payload) {
-                state.drive.path = action.payload;
-            }
-        });
-
-        builder.addCase(loadVmConfig.fulfilled, (state: VmState, action: PayloadAction<VmConfig | null>) => {
-            if (!action.payload) {
-                return;
-            }
-
+        setVmConfig: (state: VmState, action: PayloadAction<VmConfig>) => {
             const { audio, bootDevice, cdrom, cpu, drive, graphics, memory, network, spiceAgent, spiceServer } =
                 action.payload;
 
@@ -173,7 +106,7 @@ export const vmSlice = createSlice({
             state.network = network;
             state.spiceAgent = spiceAgent;
             state.spiceServer = spiceServer;
-        });
+        },
     },
 });
 
@@ -181,6 +114,7 @@ export const {
     setCpuCores,
     setMemory,
     setOpticalDriveEnabled,
+    setOpticalDrivePath,
     setHardDriveEnabled,
     setHardDrivePath,
     setBootDevice,
@@ -193,6 +127,7 @@ export const {
     setSpiceServerTicketing,
     setSpiceServerPassword,
     setSpiceServerUsbRedirection,
+    setVmConfig,
 } = vmSlice.actions;
 
 export default vmSlice.reducer;

@@ -1,4 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import { SystemInfo } from '../../types';
 
 interface SystemState {
     platform: NodeJS.Platform;
@@ -12,23 +14,18 @@ const initialState: SystemState = {
     memory: 1,
 };
 
-export const getSystemInfo = createAsyncThunk('system/getInfo', async () => {
-    const info = await electron.system.getInfo();
-
-    return info;
-});
-
 export const systemSlice = createSlice({
     name: 'system',
     initialState,
-    reducers: {},
-    extraReducers: builder => {
-        builder.addCase(getSystemInfo.fulfilled, (state, action) => {
+    reducers: {
+        setSystemInfo: (state: SystemState, action: PayloadAction<SystemInfo>) => {
             state.platform = action.payload.platform;
             state.cpus = action.payload.cpus;
             state.memory = action.payload.memory;
-        });
+        },
     },
 });
+
+export const { setSystemInfo } = systemSlice.actions;
 
 export default systemSlice.reducer;
