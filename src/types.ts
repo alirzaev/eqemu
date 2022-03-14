@@ -2,7 +2,7 @@ import type { ExecFileException } from 'child_process';
 import * as rt from 'runtypes';
 
 import { MAX_CPU_CORES_COUNT, MAX_SPICE_SERVER_PORT, MIN_CPU_CORES_COUNT, MIN_SPICE_SERVER_PORT } from './consts/vm';
-import { AudioDevice, BootDevice, Chipset, DiskImageFormat, GraphicsCard } from './enums';
+import { AudioDevice, BootDevice, Chipset, DiskImageFormat, GraphicsCard, NetworkCard } from './enums';
 
 export interface SystemInfo {
     platform: NodeJS.Platform;
@@ -71,6 +71,7 @@ export const VmConfigRuntype = rt.Record({
     }),
     network: rt.Record({
         enabled: rt.Boolean,
+        type: rt.Optional(RuntypeEnum(NetworkCard)),
     }),
     spiceAgent: rt.Record({
         enabled: rt.Boolean,
@@ -91,6 +92,10 @@ export interface VmConfig extends rt.Static<typeof VmConfigRuntype> {
     audio: {
         enabled: boolean;
         type: AudioDevice;
+    };
+    network: {
+        enabled: boolean;
+        type: NetworkCard;
     };
 }
 

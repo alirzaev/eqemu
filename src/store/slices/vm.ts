@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { AudioDevice, BootDevice, Chipset, GraphicsCard } from '../../enums';
+import { AudioDevice, BootDevice, Chipset, GraphicsCard, NetworkCard } from '../../enums';
 import { VmConfig } from '../../types';
 
 type VmState = VmConfig;
@@ -29,6 +29,7 @@ const initialState: VmState = {
     },
     network: {
         enabled: false,
+        type: NetworkCard.E1000E,
     },
     spiceAgent: {
         enabled: false,
@@ -46,6 +47,7 @@ export const vmSlice = createSlice({
     name: 'vm',
     initialState,
     reducers: {
+        /* Machine */
         setCpuCores: (state: VmState, action: PayloadAction<number>) => {
             state.cpu.cores = action.payload;
         },
@@ -55,6 +57,7 @@ export const vmSlice = createSlice({
         setChipset: (state: VmState, action: PayloadAction<Chipset>) => {
             state.chipset = action.payload;
         },
+        /* Drives */
         setOpticalDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.cdrom.enabled = action.payload;
         },
@@ -67,21 +70,29 @@ export const vmSlice = createSlice({
         setHardDrivePath: (state: VmState, action: PayloadAction<string>) => {
             state.drive.path = action.payload;
         },
+        /* Boot */
         setBootDevice: (state: VmState, action: PayloadAction<BootDevice>) => {
             state.bootDevice = action.payload;
         },
+        /* Graphics */
         setGraphicsCard: (state: VmState, action: PayloadAction<GraphicsCard>) => {
             state.graphics.card = action.payload;
         },
+        /* Audio */
         setAudioEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.audio.enabled = action.payload;
         },
         setAudioType: (state: VmState, action: PayloadAction<AudioDevice>) => {
             state.audio.type = action.payload;
         },
+        /* Network */
         setNetworkEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.network.enabled = action.payload;
         },
+        setNetworkCard: (state: VmState, action: PayloadAction<NetworkCard>) => {
+            state.network.type = action.payload;
+        },
+        /* SPICE */
         setSpiceAgentEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.spiceAgent.enabled = action.payload;
         },
@@ -100,6 +111,7 @@ export const vmSlice = createSlice({
         setSpiceServerUsbRedirection: (state: VmState, action: PayloadAction<boolean>) => {
             state.spiceServer.usbRedirection = action.payload;
         },
+        /* Others */
         setVmConfig: (state: VmState, action: PayloadAction<VmConfig>) => {
             const {
                 audio,
@@ -143,6 +155,7 @@ export const {
     setAudioEnabled,
     setAudioType,
     setNetworkEnabled,
+    setNetworkCard,
     setSpiceAgentEnabled,
     setSpiceServerEnabled,
     setSpiceServerPort,

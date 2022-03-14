@@ -1,7 +1,7 @@
 import { extname } from 'path';
 
 import { QEMU_SYSTEM_X86_64 } from './consts/system';
-import { AudioDevice, Chipset, DiskImageFormat, Shell } from './enums';
+import { AudioDevice, Chipset, DiskImageFormat, NetworkCard, Shell } from './enums';
 import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
@@ -38,7 +38,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     }
 
     if (config.network.enabled) {
-        params.push('-net nic,model=e1000e -net user');
+        params.push(`-net nic,model=${config.network.type} -net user`);
     }
 
     if (config.audio.enabled) {
@@ -116,6 +116,10 @@ export function parseVmConfig(data: string): VmConfig | null {
             audio: {
                 ...config.audio,
                 type: AudioDevice.HDA,
+            },
+            network: {
+                ...config.network,
+                type: NetworkCard.E1000E,
             },
         };
     } catch (e) {

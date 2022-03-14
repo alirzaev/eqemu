@@ -8,7 +8,7 @@ import { HardDrive } from '../HardDrive';
 import { BootDevice } from '../BootDevice';
 import { GraphicsCard } from '../GraphicsCard';
 import { AudioDevice } from '../AudioDevice';
-import { NetworkSettings } from '../NetworkSettings';
+import { NetworkCard } from '../NetworkCard';
 import { SpiceAgent } from '../SpiceAgent';
 import { SpiceServer } from '../SpiceServer';
 import { Chipset } from '../Chipset';
@@ -35,7 +35,7 @@ export function VmConfig() {
 
                 <HorizontalLayout even={true}>
                     <AudioDevice />
-                    <NetworkSettings />
+                    <NetworkCard />
                 </HorizontalLayout>
 
                 <SpiceAgent />

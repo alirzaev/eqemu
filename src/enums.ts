@@ -35,3 +35,8 @@ export enum AudioDevice {
     HDA = 'hda',
     AC97 = 'ac97',
 }
+
+export enum NetworkCard {
+    Virtio = 'virtio-net-pci',
+    E1000E = 'e1000e',
+}
