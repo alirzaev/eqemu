@@ -25,3 +25,8 @@ export enum DiskImageFormat {
     Vdi = 'vdi',
     Raw = 'raw',
 }
+
+export enum Chipset {
+    Q35 = 'q35',
+    I440FX = 'pc',
+}

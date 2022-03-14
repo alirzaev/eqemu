@@ -1,13 +1,13 @@
 import { extname } from 'path';
 
 import { QEMU_SYSTEM_X86_64 } from './consts/system';
-import { DiskImageFormat, Shell } from './enums';
+import { Chipset, DiskImageFormat, Shell } from './enums';
 import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
         QEMU_SYSTEM_X86_64,
-        '-machine q35',
+        `-machine ${config.chipset}`,
         `-smp ${config.cpu.cores}`,
         `-m ${config.memory}G`,
         `-vga ${config.graphics.card}`,
@@ -110,7 +110,10 @@ export function parseVmConfig(data: string): VmConfig | null {
         const json = JSON.parse(data);
         const config = VmConfigRuntype.check(json);
 
-        return config;
+        return {
+            ...config,
+            chipset: config.chipset ?? Chipset.Q35,
+        };
     } catch (e) {
         return null;
     }

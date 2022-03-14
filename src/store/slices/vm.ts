@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { BootDevice, GraphicsCard } from '../../enums';
+import { BootDevice, Chipset, GraphicsCard } from '../../enums';
 import { VmConfig } from '../../types';
 
 type VmState = VmConfig;
@@ -10,6 +10,7 @@ const initialState: VmState = {
     cpu: {
         cores: 2,
     },
+    chipset: Chipset.Q35,
     cdrom: {
         enabled: false,
         path: '',
@@ -49,6 +50,9 @@ export const vmSlice = createSlice({
         },
         setMemory: (state: VmState, action: PayloadAction<number>) => {
             state.memory = action.payload;
+        },
+        setChipset: (state: VmState, action: PayloadAction<Chipset>) => {
+            state.chipset = action.payload;
         },
         setOpticalDriveEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.cdrom.enabled = action.payload;
@@ -93,12 +97,24 @@ export const vmSlice = createSlice({
             state.spiceServer.usbRedirection = action.payload;
         },
         setVmConfig: (state: VmState, action: PayloadAction<VmConfig>) => {
-            const { audio, bootDevice, cdrom, cpu, drive, graphics, memory, network, spiceAgent, spiceServer } =
-                action.payload;
+            const {
+                audio,
+                bootDevice,
+                cdrom,
+                chipset,
+                cpu,
+                drive,
+                graphics,
+                memory,
+                network,
+                spiceAgent,
+                spiceServer,
+            } = action.payload;
 
             state.audio = audio;
             state.bootDevice = bootDevice;
             state.cdrom = cdrom;
+            state.chipset = chipset;
             state.cpu = cpu;
             state.drive = drive;
             state.graphics = graphics;
@@ -113,6 +129,7 @@ export const vmSlice = createSlice({
 export const {
     setCpuCores,
     setMemory,
+    setChipset,
     setOpticalDriveEnabled,
     setOpticalDrivePath,
     setHardDriveEnabled,

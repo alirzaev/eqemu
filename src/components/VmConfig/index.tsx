@@ -11,6 +11,7 @@ import { AudioDevice } from '../AudioDevice';
 import { NetworkSettings } from '../NetworkSettings';
 import { SpiceAgent } from '../SpiceAgent';
 import { SpiceServer } from '../SpiceServer';
+import { Chipset } from '../Chipset';
 
 import './index.css';
 
@@ -20,6 +21,7 @@ export function VmConfig() {
             <div className="vm-config-inner">
                 <HorizontalLayout even={true}>
                     <Cpu />
+                    <Chipset />
                     <Ram />
                 </HorizontalLayout>
 

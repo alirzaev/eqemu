@@ -2,7 +2,7 @@ import type { ExecFileException } from 'child_process';
 import * as rt from 'runtypes';
 
 import { MAX_CPU_CORES_COUNT, MAX_SPICE_SERVER_PORT, MIN_CPU_CORES_COUNT, MIN_SPICE_SERVER_PORT } from './consts/vm';
-import { BootDevice, DiskImageFormat, GraphicsCard } from './enums';
+import { BootDevice, Chipset, DiskImageFormat, GraphicsCard } from './enums';
 
 export interface SystemInfo {
     platform: NodeJS.Platform;
@@ -52,6 +52,7 @@ export const VmConfigRuntype = rt.Record({
             v => v >= MIN_CPU_CORES_COUNT && v <= MAX_CPU_CORES_COUNT
         ),
     }),
+    chipset: rt.Optional(RuntypeEnum(Chipset)),
     cdrom: rt.Record({
         enabled: rt.Boolean,
         path: rt.String,
@@ -84,7 +85,9 @@ export const VmConfigRuntype = rt.Record({
     }),
 });
 
-export type VmConfig = rt.Static<typeof VmConfigRuntype>;
+export interface VmConfig extends rt.Static<typeof VmConfigRuntype> {
+    chipset: Chipset;
+}
 
 export type QemuCheckStatus = 'valid' | 'pending' | 'invalid';
 
