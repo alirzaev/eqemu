@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { BootDevice, Chipset, GraphicsCard } from '../../enums';
+import { AudioDevice, BootDevice, Chipset, GraphicsCard } from '../../enums';
 import { VmConfig } from '../../types';
 
 type VmState = VmConfig;
@@ -25,6 +25,7 @@ const initialState: VmState = {
     },
     audio: {
         enabled: false,
+        type: AudioDevice.HDA,
     },
     network: {
         enabled: false,
@@ -74,6 +75,9 @@ export const vmSlice = createSlice({
         },
         setAudioEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.audio.enabled = action.payload;
+        },
+        setAudioType: (state: VmState, action: PayloadAction<AudioDevice>) => {
+            state.audio.type = action.payload;
         },
         setNetworkEnabled: (state: VmState, action: PayloadAction<boolean>) => {
             state.network.enabled = action.payload;
@@ -137,6 +141,7 @@ export const {
     setBootDevice,
     setGraphicsCard,
     setAudioEnabled,
+    setAudioType,
     setNetworkEnabled,
     setSpiceAgentEnabled,
     setSpiceServerEnabled,

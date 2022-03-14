@@ -30,3 +30,8 @@ export enum Chipset {
     Q35 = 'q35',
     I440FX = 'pc',
 }
+
+export enum AudioDevice {
+    HDA = 'hda',
+    AC97 = 'ac97',
+}
