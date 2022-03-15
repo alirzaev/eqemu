@@ -13,6 +13,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
         `-vga ${config.graphics.card}`,
         `-boot order=${config.bootDevice},menu=on`,
         '-usbdevice tablet',
+        '-usbdevice keyboard',
     ];
 
     if (system.platform === 'win32') {
