@@ -63,11 +63,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     }
 
     if (config.spiceServer.enabled) {
-        if (config.spiceServer.ticketing) {
-            params.push(`-spice port=${config.spiceServer.port},password=${config.spiceServer.password}`);
-        } else {
-            params.push(`-spice port=${config.spiceServer.port},disable-ticketing=on`);
-        }
+        params.push(`-spice port=${config.spiceServer.port},disable-ticketing=on`);
 
         if (config.spiceServer.usbRedirection) {
             params.push(

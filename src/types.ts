@@ -81,8 +81,6 @@ export const VmConfigRuntype = rt.Record({
         port: rt.Number.withConstraint(v => Number.isInteger(v)).withConstraint(
             v => v >= MIN_SPICE_SERVER_PORT && v <= MAX_SPICE_SERVER_PORT
         ),
-        ticketing: rt.Boolean,
-        password: rt.String,
         usbRedirection: rt.Boolean,
     }),
 });
