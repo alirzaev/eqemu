@@ -42,7 +42,15 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
     }
 
     if (config.audio.enabled) {
-        params.push(`-soundhw ${config.audio.type}`);
+        switch (config.audio.type) {
+            case AudioDevice.AC97:
+                params.push('-device AC97');
+                break;
+            case AudioDevice.HDA:
+            default:
+                params.push('-device intel-hda -device hda-duplex');
+                break;
+        }
     }
 
     if (config.spiceAgent.enabled) {
