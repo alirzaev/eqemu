@@ -7,27 +7,27 @@ import { GraphicsCard as GraphicsCardEnum } from '../enums';
 const GraphicsCardList: Array<{ text: string; value: GraphicsCardEnum }> = [
     {
         text: 'None',
-        value: GraphicsCardEnum.None,
+        value: GraphicsCardEnum.NONE,
     },
     {
         text: 'Cirrus',
-        value: GraphicsCardEnum.Cirrus,
+        value: GraphicsCardEnum.CIRRUS,
     },
     {
         text: 'Standard',
-        value: GraphicsCardEnum.Standard,
+        value: GraphicsCardEnum.STANDARD,
     },
     {
         text: 'VMware SVGA-II',
-        value: GraphicsCardEnum.Vmware,
+        value: GraphicsCardEnum.VMWARE,
     },
     {
         text: 'QXL',
-        value: GraphicsCardEnum.Qxl,
+        value: GraphicsCardEnum.QXL,
     },
     {
         text: 'VirtIO',
-        value: GraphicsCardEnum.Virtio,
+        value: GraphicsCardEnum.VIRTIO,
     },
 ];
 

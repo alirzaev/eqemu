@@ -7,15 +7,15 @@ import { BootDevice as BootDeviceEnum } from '../enums';
 const BootDeviceList: Array<{ text: string; value: BootDeviceEnum }> = [
     {
         text: 'CD-ROM',
-        value: BootDeviceEnum.Cdrom,
+        value: BootDeviceEnum.CD_ROM,
     },
     {
         text: 'Hard drive',
-        value: BootDeviceEnum.HardDrive,
+        value: BootDeviceEnum.HARD_DRIVE,
     },
     {
         text: 'Network',
-        value: BootDeviceEnum.Network,
+        value: BootDeviceEnum.NETWORK,
     },
 ];
 

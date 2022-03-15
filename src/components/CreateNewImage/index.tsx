@@ -31,7 +31,7 @@ function ImagePath() {
         if (!result.canceled && result.filePath) {
             let newPath = result.filePath;
 
-            newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCow2}` : newPath;
+            newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCOW2}` : newPath;
             dispatch(setNewImagePath(newPath));
         }
     };

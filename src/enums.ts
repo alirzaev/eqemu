@@ -1,29 +1,29 @@
 export enum GraphicsCard {
-    None = 'none',
-    Cirrus = 'cirrus',
-    Standard = 'std',
-    Vmware = 'vmware',
-    Qxl = 'qxl',
-    Virtio = 'virtio',
+    NONE = 'none',
+    CIRRUS = 'cirrus',
+    STANDARD = 'std',
+    VMWARE = 'vmware',
+    QXL = 'qxl',
+    VIRTIO = 'virtio',
 }
 
 export enum BootDevice {
-    Cdrom = 'd',
-    HardDrive = 'c',
-    Network = 'n',
+    CD_ROM = 'd',
+    HARD_DRIVE = 'c',
+    NETWORK = 'n',
 }
 
 export enum Shell {
-    Cmd = 'cmd',
-    PowerShell = 'powershell',
-    Bash = 'bash',
+    CMD = 'cmd',
+    POWERSHELL = 'powershell',
+    BASH = 'bash',
 }
 
 export enum DiskImageFormat {
-    QCow2 = 'qcow2',
-    Vmware = 'vmdk',
-    Vdi = 'vdi',
-    Raw = 'raw',
+    QCOW2 = 'qcow2',
+    VMWARE = 'vmdk',
+    VDI = 'vdi',
+    RAW = 'raw',
 }
 
 export enum Chipset {
@@ -37,6 +37,6 @@ export enum AudioDevice {
 }
 
 export enum NetworkCard {
-    Virtio = 'virtio-net-pci',
+    VIRTIO = 'virtio-net-pci',
     E1000E = 'e1000e',
 }

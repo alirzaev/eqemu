@@ -11,7 +11,7 @@ const NetworkCardList: Array<{ text: string; value: NetworkCardEnum }> = [
     },
     {
         text: 'VirtIO',
-        value: NetworkCardEnum.Virtio,
+        value: NetworkCardEnum.VIRTIO,
     },
 ];
 

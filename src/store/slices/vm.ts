@@ -19,9 +19,9 @@ const initialState: VmState = {
         enabled: false,
         path: '',
     },
-    bootDevice: BootDevice.HardDrive,
+    bootDevice: BootDevice.HARD_DRIVE,
     graphics: {
-        card: GraphicsCard.Standard,
+        card: GraphicsCard.STANDARD,
     },
     audio: {
         enabled: false,

@@ -93,23 +93,23 @@ export function getImageFileFormat(path: string): DiskImageFormat {
 
     switch (extension) {
         case 'qcow2':
-            return DiskImageFormat.QCow2;
+            return DiskImageFormat.QCOW2;
         case 'vmdk':
-            return DiskImageFormat.Vmware;
+            return DiskImageFormat.VMWARE;
         case 'vdi':
-            return DiskImageFormat.Vdi;
+            return DiskImageFormat.VDI;
         default:
-            return DiskImageFormat.Raw;
+            return DiskImageFormat.RAW;
     }
 }
 
 export function getShellMultilineDelimeter(shell: Shell): string {
     switch (shell) {
-        case Shell.Cmd:
+        case Shell.CMD:
             return '^';
-        case Shell.PowerShell:
+        case Shell.POWERSHELL:
             return '`';
-        case Shell.Bash:
+        case Shell.BASH:
             return '\\';
     }
 }

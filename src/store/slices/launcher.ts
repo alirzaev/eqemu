@@ -7,7 +7,7 @@ interface LauncherState {
 }
 
 const initialState: LauncherState = {
-    shell: Shell.Cmd,
+    shell: Shell.CMD,
 };
 
 export const launcherSlice = createSlice({

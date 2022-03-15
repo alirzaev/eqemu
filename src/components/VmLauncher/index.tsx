@@ -10,15 +10,15 @@ import './index.css';
 const ShellList: Array<{ text: string; value: Shell }> = [
     {
         text: 'cmd',
-        value: Shell.Cmd,
+        value: Shell.CMD,
     },
     {
         text: 'PowerShell',
-        value: Shell.PowerShell,
+        value: Shell.POWERSHELL,
     },
     {
         text: 'bash',
-        value: Shell.Bash,
+        value: Shell.BASH,
     },
 ];
 
