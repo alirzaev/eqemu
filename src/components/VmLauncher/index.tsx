@@ -1,7 +1,7 @@
 import * as React from 'react';
+import { useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setShell } from '../../store/slices/launcher';
+import { useAppSelector } from '../../store/hooks';
 import { Shell } from '../../enums';
 import { buildQemuCmdArgs, getShellMultilineDelimeter } from '../../utils';
 
@@ -23,9 +23,8 @@ const ShellList: Array<{ text: string; value: Shell }> = [
 ];
 
 export function VmLauncher() {
-    const { shell } = useAppSelector(state => state.launcher);
+    const [shell, setShell] = useState(Shell.CMD);
     const { vm: config, system } = useAppSelector(state => state);
-    const dispatch = useAppDispatch();
 
     const delimeter = getShellMultilineDelimeter(shell);
     const qemuArgs = buildQemuCmdArgs(config, system);
@@ -52,7 +51,7 @@ export function VmLauncher() {
                                 type="radio"
                                 name="delimeter"
                                 value={value}
-                                onChange={event => dispatch(setShell(event.target.value as Shell))}
+                                onChange={({ target }) => setShell(target.value as Shell)}
                                 checked={shell == value}
                             />
                             <label htmlFor={`delimeter${value}`} className="form-check-label">
