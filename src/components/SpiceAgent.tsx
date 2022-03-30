@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setSpiceAgentEnabled } from '../store/slices/vm';
 
 export function SpiceAgent() {
-    const { enabled } = useAppSelector(state => state.vm.spiceAgent);
+    const enabled = useAppSelector(state => state.vm.spiceAgent.enabled);
     const dispatch = useAppDispatch();
 
     return (

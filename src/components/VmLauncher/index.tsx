@@ -24,7 +24,8 @@ const ShellList: Array<{ text: string; value: Shell }> = [
 
 export function VmLauncher() {
     const [shell, setShell] = useState(Shell.CMD);
-    const { vm: config, system } = useAppSelector(state => state);
+    const config = useAppSelector(state => state.vm);
+    const system = useAppSelector(state => state.system);
 
     const delimeter = getShellMultilineDelimeter(shell);
     const qemuArgs = buildQemuCmdArgs(config, system);

@@ -16,7 +16,8 @@ const AudioDeviceList: Array<{ text: string; value: AudioDeviceEnum }> = [
 ];
 
 export function AudioDevice() {
-    const { enabled, type } = useAppSelector(state => state.vm.audio);
+    const enabled = useAppSelector(state => state.vm.audio.enabled);
+    const type = useAppSelector(state => state.vm.audio.type);
     const dispatch = useAppDispatch();
 
     return (

@@ -14,7 +14,8 @@ import './index.css';
 const NEW_IMAGE_SIZE_STEP = 0.1;
 
 function ImagePath() {
-    const { path, status } = useAppSelector(state => state.newImage);
+    const path = useAppSelector(state => state.newImage.path);
+    const status = useAppSelector(state => state.newImage.status);
     const disabled = status === 'pending';
     const dispatch = useAppDispatch();
 
@@ -59,7 +60,8 @@ function ImagePath() {
 }
 
 function ImageSize() {
-    const { size, status } = useAppSelector(state => state.newImage);
+    const size = useAppSelector(state => state.newImage.size);
+    const status = useAppSelector(state => state.newImage.status);
     const disabled = status === 'pending';
     const dispatch = useAppDispatch();
 
@@ -107,7 +109,8 @@ function ImageSize() {
 }
 
 function ImageStatus() {
-    const { status, path } = useAppSelector(state => state.newImage);
+    const path = useAppSelector(state => state.newImage.path);
+    const status = useAppSelector(state => state.newImage.status);
     const disabled = status === 'pending' || !path;
     const dispatch = useAppDispatch();
 
@@ -132,7 +135,7 @@ function ImageStatus() {
 }
 
 export function CreateNewImage() {
-    const { status } = useAppSelector(state => state.newImage);
+    const status = useAppSelector(state => state.newImage.status);
     const disabled = status === 'pending';
     const dispatch = useAppDispatch();
 

@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { MAX_SPICE_SERVER_PORT, MIN_SPICE_SERVER_PORT } from '../consts/vm';
 
 function SpiceServerEnabled() {
-    const { enabled } = useAppSelector(state => state.vm.spiceServer);
+    const enabled = useAppSelector(state => state.vm.spiceServer.enabled);
     const dispatch = useAppDispatch();
 
     return (
@@ -54,7 +54,7 @@ function SpiceServerUsbRedirection() {
 }
 
 function SpiceServerPort() {
-    const { port } = useAppSelector(state => state.vm.spiceServer);
+    const port = useAppSelector(state => state.vm.spiceServer.port);
     const dispatch = useAppDispatch();
 
     return (
@@ -79,7 +79,7 @@ function SpiceServerPort() {
 }
 
 export function SpiceServer() {
-    const { enabled } = useAppSelector(state => state.vm.spiceServer);
+    const enabled = useAppSelector(state => state.vm.spiceServer.enabled);
 
     return (
         <div>

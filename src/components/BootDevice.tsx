@@ -20,7 +20,7 @@ const BootDeviceList: Array<{ text: string; value: BootDeviceEnum }> = [
 ];
 
 export function BootDevice() {
-    const { bootDevice } = useAppSelector(state => state.vm);
+    const bootDevice = useAppSelector(state => state.vm.bootDevice);
     const dispatch = useAppDispatch();
 
     return (

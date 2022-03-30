@@ -5,7 +5,8 @@ import { setHardDriveEnabled, setHardDrivePath } from '../store/slices/vm';
 import { setWindowActiveView } from '../store/slices/window';
 
 export function HardDrive() {
-    const { enabled, path } = useAppSelector(state => state.vm.drive);
+    const enabled = useAppSelector(state => state.vm.drive.enabled);
+    const path = useAppSelector(state => state.vm.drive.path);
     const dispatch = useAppDispatch();
 
     const selectPath = async () => {

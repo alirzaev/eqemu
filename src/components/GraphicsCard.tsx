@@ -32,7 +32,7 @@ const GraphicsCardList: Array<{ text: string; value: GraphicsCardEnum }> = [
 ];
 
 export function GraphicsCard() {
-    const { card } = useAppSelector(state => state.vm.graphics);
+    const card = useAppSelector(state => state.vm.graphics.card);
     const dispatch = useAppDispatch();
 
     return (

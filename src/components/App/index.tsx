@@ -16,7 +16,7 @@ import { Settings } from '../Settings';
 import './index.css';
 
 export function App() {
-    const { activeView } = useAppSelector(state => state.window);
+    const activeView = useAppSelector(state => state.window.activeView);
     const { getState } = useStore<RootState>();
     const dispatch = useAppDispatch();
 

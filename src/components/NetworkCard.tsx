@@ -16,7 +16,8 @@ const NetworkCardList: Array<{ text: string; value: NetworkCardEnum }> = [
 ];
 
 export function NetworkCard() {
-    const { enabled, type } = useAppSelector(state => state.vm.network);
+    const enabled = useAppSelector(state => state.vm.network.enabled);
+    const type = useAppSelector(state => state.vm.network.type);
     const dispatch = useAppDispatch();
 
     return (

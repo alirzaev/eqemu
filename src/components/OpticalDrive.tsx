@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setOpticalDriveEnabled, setOpticalDrivePath } from '../store/slices/vm';
 
 export function OpticalDrive() {
-    const { enabled, path } = useAppSelector(state => state.vm.cdrom);
+    const enabled = useAppSelector(state => state.vm.cdrom.enabled);
+    const path = useAppSelector(state => state.vm.cdrom.path);
     const dispatch = useAppDispatch();
 
     const selectPath = async () => {

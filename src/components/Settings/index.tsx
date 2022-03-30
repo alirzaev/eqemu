@@ -20,7 +20,8 @@ export function QemuStatus({ title, status }: { title: string; status: QemuCheck
 }
 
 export function Settings() {
-    const { loaded, qemu } = useAppSelector(state => state.settings);
+    const loaded = useAppSelector(state => state.settings.loaded);
+    const qemu = useAppSelector(state => state.settings.qemu);
     const dispatch = useAppDispatch();
 
     useEffect(() => {

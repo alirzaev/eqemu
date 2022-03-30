@@ -15,7 +15,7 @@ const ChipsetList: Array<{ text: string; value: ChipsetEnum }> = [
     },
 ];
 export function Chipset() {
-    const { chipset } = useAppSelector(state => state.vm);
+    const chipset = useAppSelector(state => state.vm.chipset);
     const dispatch = useAppDispatch();
 
     return (

@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setCpuCores } from '../store/slices/vm';
 
 export function Cpu() {
-    const { cores } = useAppSelector(state => state.vm.cpu);
+    const cores = useAppSelector(state => state.vm.cpu.cores);
     const dispatch = useAppDispatch();
 
     return (
