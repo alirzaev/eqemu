@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { HTMLOption } from '../types';
 import { Chipset as ChipsetEnum } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setChipset } from '../store/slices/vm';
 
-const ChipsetList: Array<{ text: string; value: ChipsetEnum }> = [
+const ChipsetList: Array<HTMLOption<ChipsetEnum>> = [
     {
         text: 'i440FX',
         value: ChipsetEnum.I440FX,

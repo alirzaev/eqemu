@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
 
-import { useAppSelector } from '../../store/hooks';
+import { HTMLOption } from '../../types';
 import { Shell } from '../../enums';
+import { useAppSelector } from '../../store/hooks';
 import { buildQemuCmdArgs, getShellMultilineDelimeter } from '../../utils';
 
 import './index.css';
 
-const ShellList: Array<{ text: string; value: Shell }> = [
+const ShellList: Array<HTMLOption<Shell>> = [
     {
         text: 'cmd',
         value: Shell.CMD,

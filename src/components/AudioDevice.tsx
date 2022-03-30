@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { HTMLOption } from '../types';
 import { AudioDevice as AudioDeviceEnum } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setAudioEnabled, setAudioType } from '../store/slices/vm';
 
-const AudioDeviceList: Array<{ text: string; value: AudioDeviceEnum }> = [
+const AudioDeviceList: Array<HTMLOption<AudioDeviceEnum>> = [
     {
         text: 'HDA',
         value: AudioDeviceEnum.HDA,

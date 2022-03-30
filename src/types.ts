@@ -113,3 +113,8 @@ export interface ApplicationSettings {
         };
     };
 }
+
+export interface HTMLOption<V> {
+    text: string;
+    value: V;
+}

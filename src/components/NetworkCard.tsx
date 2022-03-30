@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { HTMLOption } from '../types';
 import { NetworkCard as NetworkCardEnum } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setNetworkCard, setNetworkEnabled } from '../store/slices/vm';
 
-const NetworkCardList: Array<{ text: string; value: NetworkCardEnum }> = [
+const NetworkCardList: Array<HTMLOption<NetworkCardEnum>> = [
     {
         text: 'E1000E',
         value: NetworkCardEnum.E1000E,

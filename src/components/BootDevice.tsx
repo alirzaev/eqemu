@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { HTMLOption } from '../types';
+import { BootDevice as BootDeviceEnum } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setBootDevice } from '../store/slices/vm';
-import { BootDevice as BootDeviceEnum } from '../enums';
 
-const BootDeviceList: Array<{ text: string; value: BootDeviceEnum }> = [
+const BootDeviceList: Array<HTMLOption<BootDeviceEnum>> = [
     {
         text: 'CD-ROM',
         value: BootDeviceEnum.CD_ROM,

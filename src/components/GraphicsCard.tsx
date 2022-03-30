@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { HTMLOption } from '../types';
+import { GraphicsCard as GraphicsCardEnum } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setGraphicsCard } from '../store/slices/vm';
-import { GraphicsCard as GraphicsCardEnum } from '../enums';
 
-const GraphicsCardList: Array<{ text: string; value: GraphicsCardEnum }> = [
+const GraphicsCardList: Array<HTMLOption<GraphicsCardEnum>> = [
     {
         text: 'None',
         value: GraphicsCardEnum.NONE,
