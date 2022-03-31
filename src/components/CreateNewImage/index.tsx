@@ -2,12 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { extname } from 'path';
 
-import { AppDispatch, RootState } from '../../store';
-import { setNewImageSize, createNewImage, resetNewImageState, setNewImagePath } from '../../store/slices/newImage';
+import { RootState } from '../../store';
 import { setHardDrivePath } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
 import { DiskImageFormat } from '../../enums';
 import { MAX_NEW_IMAGE_SIZE, MIN_NEW_IMAGE_SIZE } from '../../consts/newImage';
+import { getImageFileFormat } from '../../utils';
 
 import './index.css';
 
@@ -15,32 +15,47 @@ const NEW_IMAGE_SIZE_STEP = 0.1;
 
 type IOwnProps = Record<string, never>;
 
-interface IStateProps {
-    busy: boolean;
-    status: string;
-    path: string;
-    size: number;
-}
+type IStateProps = Record<string, never>;
 
 interface IDispatchProps {
-    setPath: (path: string) => void;
     setHardDrivePath: (path: string) => void;
-    setSize: (size: number) => void;
-    create: () => Promise<string>;
-    reset: () => void;
     close: () => void;
 }
 
-class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & IDispatchProps> {
+type IProps = IOwnProps & IStateProps & IDispatchProps;
+
+type ImageCreationStatus = 'pending' | 'failed' | 'ready';
+
+interface IState {
+    path: string;
+    size: number;
+    status: ImageCreationStatus;
+}
+
+class CreateNewImageInner extends React.PureComponent<IProps, IState> {
+    private unmounted = false;
+
     displayName = 'CreateNewImage';
 
-    componentWillUnmount() {
-        this.props.reset();
+    constructor(props: IProps) {
+        super(props);
+
+        this.state = {
+            path: '',
+            size: 25,
+            status: 'ready',
+        };
     }
 
-    selectPath = async () => {
+    componentWillUnmount() {
+        this.unmounted = true;
+    }
+
+    isPending = () => this.state.status === 'pending';
+
+    selectImagePath = async () => {
         const result = await electron.dialog.showSaveDialog({
-            defaultPath: this.props.path,
+            defaultPath: this.state.path,
             filters: [
                 { name: 'QEMU disk image', extensions: ['qcow2'] },
                 { name: 'VMware disk image', extensions: ['vmdk'] },
@@ -52,20 +67,42 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
             let newPath = result.filePath;
 
             newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCOW2}` : newPath;
-            this.props.setPath(newPath);
+            this.setState({ path: newPath });
         }
     };
 
-    setSize = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.props.setSize(Number.parseFloat(event.target.value));
+    setImageSize = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const size = Number.parseFloat(event.target.value);
+
+        this.setState({
+            size,
+        });
     };
 
     createImage = async () => {
-        const status = await this.props.create();
+        this.setState({ status: 'pending' });
 
-        if (status === 'ready') {
-            this.props.setHardDrivePath(this.props.path);
-            this.props.close();
+        const { path, size } = this.state;
+        const format = getImageFileFormat(path);
+
+        try {
+            const result = await electron.system.createImage(path, format, size);
+            const ok = typeof result === 'string';
+
+            if (this.unmounted) {
+                console.log('unmounted');
+                return;
+            }
+
+            if (ok) {
+                this.setState({ status: 'ready' });
+                this.props.setHardDrivePath(path);
+                this.props.close();
+            } else {
+                this.setState({ status: 'failed' });
+            }
+        } catch (_) {
+            this.setState({ status: 'failed' });
         }
     };
 
@@ -80,15 +117,15 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
                         id="newImagePath"
                         className="form-control"
                         type="text"
-                        value={this.props.path}
-                        disabled={this.props.busy}
+                        value={this.state.path}
+                        disabled={this.isPending()}
                         readOnly
                     />
                     <button
                         className="btn btn-outline-primary"
                         type="button"
-                        onClick={this.selectPath}
-                        disabled={this.props.busy}
+                        onClick={this.selectImagePath}
+                        disabled={this.isPending()}
                     >
                         Select
                     </button>
@@ -113,9 +150,9 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
                             max={MAX_NEW_IMAGE_SIZE}
                             step={NEW_IMAGE_SIZE_STEP}
                             className="form-range"
-                            value={this.props.size}
-                            onChange={this.setSize}
-                            disabled={this.props.busy}
+                            value={this.state.size}
+                            onChange={this.setImageSize}
+                            disabled={this.isPending()}
                         />
                         <span>{MAX_NEW_IMAGE_SIZE} GiB</span>
                     </div>
@@ -127,9 +164,9 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
                                 max={MAX_NEW_IMAGE_SIZE}
                                 step={NEW_IMAGE_SIZE_STEP}
                                 className="form-control"
-                                value={this.props.size}
-                                onChange={this.setSize}
-                                disabled={this.props.busy}
+                                value={this.state.size}
+                                onChange={this.setImageSize}
+                                disabled={this.isPending()}
                             />
                             <span className="input-group-text">GiB</span>
                         </div>
@@ -139,21 +176,31 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
         );
     }
 
-    renderImageStatus() {
-        let statusElement;
+    renderImageControls() {
+        let status;
 
-        if (this.props.status === 'failed') {
-            statusElement = <span className="text-danger">Failed to create an image</span>;
-        } else if (this.props.status === 'pending') {
-            statusElement = <span className="text-secondary">Creating...</span>;
+        switch (this.state.status) {
+            case 'failed':
+                status = <span className="text-danger">Failed to create an image</span>;
+                break;
+            case 'pending':
+                status = <span className="text-secondary">Creating...</span>;
+                break;
+            default:
+                status = null;
         }
 
         return (
-            <div className="create-new-image-status">
-                <button type="button" className="btn btn-primary" onClick={this.createImage} disabled={this.props.busy}>
+            <div className="create-new-image-controls">
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={this.createImage}
+                    disabled={this.isPending()}
+                >
                     Create
                 </button>
-                {statusElement}
+                {status}
             </div>
         );
     }
@@ -161,7 +208,7 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
     render() {
         const imagePath = this.renderImagePath();
         const imageSize = this.renderImageSize();
-        const imageStatus = this.renderImageStatus();
+        const imageControls = this.renderImageControls();
 
         return (
             <div className="create-new-image">
@@ -171,14 +218,14 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
                 <div className="create-new-image-main">
                     {imagePath}
                     {imageSize}
-                    {imageStatus}
+                    {imageControls}
                 </div>
                 <div className="create-new-image-footer">
                     <button
                         type="button"
                         className="btn btn-sm btn-outline-danger"
                         onClick={this.props.close}
-                        disabled={this.props.busy}
+                        disabled={this.isPending()}
                     >
                         Cancel
                     </button>
@@ -188,19 +235,7 @@ class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & 
     }
 }
 
-export const CreateNewImage = connect<IStateProps, IDispatchProps, IOwnProps, RootState>(
-    state => ({
-        busy: state.newImage.status === 'pending',
-        status: state.newImage.status as string,
-        path: state.newImage.path,
-        size: state.newImage.size,
-    }),
-    (dispatch: AppDispatch) => ({
-        setPath: path => dispatch(setNewImagePath(path)),
-        setHardDrivePath: path => dispatch(setHardDrivePath(path)),
-        setSize: size => dispatch(setNewImageSize(size)),
-        create: () => dispatch(createNewImage()).then(({ payload }) => payload as string),
-        reset: () => dispatch(resetNewImageState()),
-        close: () => dispatch(setWindowActiveView('main')),
-    })
-)(CreateNewImageInner);
+export const CreateNewImage = connect<IStateProps, IDispatchProps, IOwnProps, RootState>(null, dispatch => ({
+    setHardDrivePath: path => dispatch(setHardDrivePath(path)),
+    close: () => dispatch(setWindowActiveView('main')),
+}))(CreateNewImageInner);

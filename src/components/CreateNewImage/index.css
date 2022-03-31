@@ -62,7 +62,7 @@
     flex-shrink: 0;
 }
 
-.create-new-image-status {
+.create-new-image-controls {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

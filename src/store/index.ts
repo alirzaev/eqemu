@@ -4,7 +4,6 @@ import systemReducer from './slices/system';
 import vmReducer from './slices/vm';
 import settingsReducer from './slices/settings';
 import windowReducer from './slices/window';
-import newImageReducer from './slices/newImage';
 
 export const store = configureStore({
     reducer: {
@@ -12,7 +11,6 @@ export const store = configureStore({
         vm: vmReducer,
         settings: settingsReducer,
         window: windowReducer,
-        newImage: newImageReducer,
     },
 });
 
