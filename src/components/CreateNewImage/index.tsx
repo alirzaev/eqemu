@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { extname } from 'path';
 
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { AppDispatch, RootState } from '../../store';
 import { setNewImageSize, createNewImage, resetNewImageState, setNewImagePath } from '../../store/slices/newImage';
 import { setHardDrivePath } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
@@ -13,15 +13,34 @@ import './index.css';
 
 const NEW_IMAGE_SIZE_STEP = 0.1;
 
-function ImagePath() {
-    const path = useAppSelector(state => state.newImage.path);
-    const status = useAppSelector(state => state.newImage.status);
-    const disabled = status === 'pending';
-    const dispatch = useAppDispatch();
+type IOwnProps = Record<string, never>;
 
-    const selectPath = async () => {
+interface IStateProps {
+    busy: boolean;
+    status: string;
+    path: string;
+    size: number;
+}
+
+interface IDispatchProps {
+    setPath: (path: string) => void;
+    setHardDrivePath: (path: string) => void;
+    setSize: (size: number) => void;
+    create: () => Promise<string>;
+    reset: () => void;
+    close: () => void;
+}
+
+class CreateNewImageInner extends React.PureComponent<IOwnProps & IStateProps & IDispatchProps> {
+    displayName = 'CreateNewImage';
+
+    componentWillUnmount() {
+        this.props.reset();
+    }
+
+    selectPath = async () => {
         const result = await electron.dialog.showSaveDialog({
-            defaultPath: path,
+            defaultPath: this.props.path,
             filters: [
                 { name: 'QEMU disk image', extensions: ['qcow2'] },
                 { name: 'VMware disk image', extensions: ['vmdk'] },
@@ -33,138 +52,155 @@ function ImagePath() {
             let newPath = result.filePath;
 
             newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCOW2}` : newPath;
-            dispatch(setNewImagePath(newPath));
+            this.props.setPath(newPath);
         }
     };
 
-    return (
-        <div>
-            <label htmlFor="newImagePath" className="form-label">
-                Path
-            </label>
-            <div className="input-group mb-2">
-                <input
-                    id="newImagePath"
-                    className="form-control"
-                    type="text"
-                    value={path}
-                    disabled={disabled}
-                    readOnly
-                />
-                <button className="btn btn-outline-primary" type="button" onClick={selectPath} disabled={disabled}>
-                    Select
-                </button>
-            </div>
-        </div>
-    );
-}
+    setSize = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.props.setSize(Number.parseFloat(event.target.value));
+    };
 
-function ImageSize() {
-    const size = useAppSelector(state => state.newImage.size);
-    const status = useAppSelector(state => state.newImage.status);
-    const disabled = status === 'pending';
-    const dispatch = useAppDispatch();
+    createImage = async () => {
+        const status = await this.props.create();
 
-    const setSize = (value: string) => dispatch(setNewImageSize(Number.parseFloat(value)));
+        if (status === 'ready') {
+            this.props.setHardDrivePath(this.props.path);
+            this.props.close();
+        }
+    };
 
-    return (
-        <div>
-            <label htmlFor="newImageSizeRange" className="form-label">
-                Image size
-            </label>
-            <div className="create-new-image-size-block">
-                <div className="create-new-image-size-range">
-                    <span>{MIN_NEW_IMAGE_SIZE} GiB</span>
+    renderImagePath() {
+        return (
+            <div>
+                <label htmlFor="newImagePath" className="form-label">
+                    Path
+                </label>
+                <div className="input-group mb-2">
                     <input
-                        type="range"
-                        id="newImageSizeRange"
-                        min={MIN_NEW_IMAGE_SIZE}
-                        max={MAX_NEW_IMAGE_SIZE}
-                        step={NEW_IMAGE_SIZE_STEP}
-                        className="form-range"
-                        value={size}
-                        onChange={({ target }) => setSize(target.value)}
-                        disabled={disabled}
+                        id="newImagePath"
+                        className="form-control"
+                        type="text"
+                        value={this.props.path}
+                        disabled={this.props.busy}
+                        readOnly
                     />
-                    <span>{MAX_NEW_IMAGE_SIZE} GiB</span>
+                    <button
+                        className="btn btn-outline-primary"
+                        type="button"
+                        onClick={this.selectPath}
+                        disabled={this.props.busy}
+                    >
+                        Select
+                    </button>
                 </div>
-                <div className="create-new-image-size-numeric">
-                    <div className="input-group">
+            </div>
+        );
+    }
+
+    renderImageSize() {
+        return (
+            <div>
+                <label htmlFor="newImageSizeRange" className="form-label">
+                    Image size
+                </label>
+                <div className="create-new-image-size-block">
+                    <div className="create-new-image-size-range">
+                        <span>{MIN_NEW_IMAGE_SIZE} GiB</span>
                         <input
-                            type="number"
+                            type="range"
+                            id="newImageSizeRange"
                             min={MIN_NEW_IMAGE_SIZE}
                             max={MAX_NEW_IMAGE_SIZE}
                             step={NEW_IMAGE_SIZE_STEP}
-                            className="form-control"
-                            value={size}
-                            onChange={({ target }) => setSize(target.value)}
-                            disabled={disabled}
+                            className="form-range"
+                            value={this.props.size}
+                            onChange={this.setSize}
+                            disabled={this.props.busy}
                         />
-                        <span className="input-group-text">GiB</span>
+                        <span>{MAX_NEW_IMAGE_SIZE} GiB</span>
+                    </div>
+                    <div className="create-new-image-size-numeric">
+                        <div className="input-group">
+                            <input
+                                type="number"
+                                min={MIN_NEW_IMAGE_SIZE}
+                                max={MAX_NEW_IMAGE_SIZE}
+                                step={NEW_IMAGE_SIZE_STEP}
+                                className="form-control"
+                                value={this.props.size}
+                                onChange={this.setSize}
+                                disabled={this.props.busy}
+                            />
+                            <span className="input-group-text">GiB</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
 
-function ImageStatus() {
-    const path = useAppSelector(state => state.newImage.path);
-    const status = useAppSelector(state => state.newImage.status);
-    const disabled = status === 'pending' || !path;
-    const dispatch = useAppDispatch();
+    renderImageStatus() {
+        let statusElement;
 
-    const handler = async () => {
-        const { payload } = await dispatch(createNewImage());
-
-        if (payload === 'ready') {
-            dispatch(setHardDrivePath(path));
-            dispatch(setWindowActiveView('main'));
+        if (this.props.status === 'failed') {
+            statusElement = <span className="text-danger">Failed to create an image</span>;
+        } else if (this.props.status === 'pending') {
+            statusElement = <span className="text-secondary">Creating...</span>;
         }
-    };
 
-    return (
-        <div className="create-new-image-status">
-            <button type="button" className="btn btn-primary" onClick={handler} disabled={disabled}>
-                Create
-            </button>
-            {status === 'failed' && <span className="text-danger">Failed to create an image</span>}
-            {status === 'pending' && <span className="text-secondary">Creating...</span>}
-        </div>
-    );
-}
-
-export function CreateNewImage() {
-    const status = useAppSelector(state => state.newImage.status);
-    const disabled = status === 'pending';
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        return () => {
-            dispatch(resetNewImageState());
-        };
-    }, []);
-
-    return (
-        <div className="create-new-image">
-            <div className="create-new-image-header">
-                <h1>Create a new disk image</h1>
-            </div>
-            <div className="create-new-image-main">
-                <ImagePath />
-                <ImageSize />
-                <ImageStatus />
-            </div>
-            <div className="create-new-image-footer">
-                <button
-                    type="button"
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => dispatch(setWindowActiveView('main'))}
-                    disabled={disabled}
-                >
-                    Cancel
+        return (
+            <div className="create-new-image-status">
+                <button type="button" className="btn btn-primary" onClick={this.createImage} disabled={this.props.busy}>
+                    Create
                 </button>
+                {statusElement}
             </div>
-        </div>
-    );
+        );
+    }
+
+    render() {
+        const imagePath = this.renderImagePath();
+        const imageSize = this.renderImageSize();
+        const imageStatus = this.renderImageStatus();
+
+        return (
+            <div className="create-new-image">
+                <div className="create-new-image-header">
+                    <h1>Create a new disk image</h1>
+                </div>
+                <div className="create-new-image-main">
+                    {imagePath}
+                    {imageSize}
+                    {imageStatus}
+                </div>
+                <div className="create-new-image-footer">
+                    <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={this.props.close}
+                        disabled={this.props.busy}
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        );
+    }
 }
+
+export const CreateNewImage = connect<IStateProps, IDispatchProps, IOwnProps, RootState>(
+    state => ({
+        busy: state.newImage.status === 'pending',
+        status: state.newImage.status as string,
+        path: state.newImage.path,
+        size: state.newImage.size,
+    }),
+    (dispatch: AppDispatch) => ({
+        setPath: path => dispatch(setNewImagePath(path)),
+        setHardDrivePath: path => dispatch(setHardDrivePath(path)),
+        setSize: size => dispatch(setNewImageSize(size)),
+        create: () => dispatch(createNewImage()).then(({ payload }) => payload as string),
+        reset: () => dispatch(resetNewImageState()),
+        close: () => dispatch(setWindowActiveView('main')),
+    })
+)(CreateNewImageInner);

@@ -9,7 +9,7 @@ import { QemuCheckStatus } from '../../types';
 
 import './index.css';
 
-export function QemuStatus({ title, status }: { title: string; status: QemuCheckStatus }) {
+function renderQemuExecFileStatus(title: string, status: QemuCheckStatus) {
     return (
         <div>
             {status === 'valid' && <span className="text-success">{title}: OK</span>}
@@ -40,38 +40,48 @@ export function Settings() {
         }
     };
 
+    let content;
+
+    if (loaded) {
+        const qemuSystemStatus = renderQemuExecFileStatus(QEMU_SYSTEM_X86_64, qemu.status.qemuSystem);
+        const qemuImgStatus = renderQemuExecFileStatus(QEMU_IMG, qemu.status.qemuImg);
+
+        content = (
+            <div className="settings-main">
+                <label htmlFor="settingsQemuPath" className="form-label">
+                    The path to the QEMU folder
+                </label>
+                <div className="input-group mb-2">
+                    <input id="settingsQemuPath" className="form-control" type="text" value={qemu.path} readOnly />
+                    <button
+                        className="btn btn-outline-primary"
+                        type="button"
+                        onClick={selectQemuPath}
+                        disabled={qemu.status.qemuSystem === 'pending' || qemu.status.qemuImg === 'pending'}
+                    >
+                        Select
+                    </button>
+                </div>
+                {qemuSystemStatus}
+                {qemuImgStatus}
+            </div>
+        );
+    } else {
+        content = (
+            <div className="settings-spinner">
+                <div className="spinner-border text-primary">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="settings">
             <div className="settings-header">
                 <h1>Settings</h1>
             </div>
-            {!loaded && (
-                <div className="settings-spinner">
-                    <div className="spinner-border text-primary">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            )}
-            {loaded && (
-                <div className="settings-main">
-                    <label htmlFor="settingsQemuPath" className="form-label">
-                        The path to the QEMU folder
-                    </label>
-                    <div className="input-group mb-2">
-                        <input id="settingsQemuPath" className="form-control" type="text" value={qemu.path} readOnly />
-                        <button
-                            className="btn btn-outline-primary"
-                            type="button"
-                            onClick={selectQemuPath}
-                            disabled={qemu.status.qemuSystem === 'pending' || qemu.status.qemuImg === 'pending'}
-                        >
-                            Select
-                        </button>
-                    </div>
-                    <QemuStatus title={QEMU_SYSTEM_X86_64} status={qemu.status.qemuSystem} />
-                    <QemuStatus title={QEMU_IMG} status={qemu.status.qemuImg} />
-                </div>
-            )}
+            {content}
             <div className="settings-footer">
                 <button
                     type="button"
