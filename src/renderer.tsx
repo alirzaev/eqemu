@@ -5,14 +5,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { App } from './components/App';
+import { Eqemu } from './components/Eqemu';
 import { store } from './store';
 
 import './index.css';
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <Eqemu />
     </Provider>,
-    document.querySelector('#app')
+    document.querySelector('#eqemu')
 );
