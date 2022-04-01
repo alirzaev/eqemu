@@ -47,13 +47,24 @@ export function App() {
         });
     }, []);
 
+    let view;
+
+    switch (activeView) {
+        case 'create-new-image':
+            view = <CreateNewImage />;
+            break;
+        case 'settings':
+            view = <Settings />;
+            break;
+        case 'main':
+        default:
+            view = <Main />;
+            break;
+    }
+
     return (
         <div className="app">
-            <div className="app-child-wrapper">
-                {activeView === 'main' && <Main />}
-                {activeView === 'settings' && <Settings />}
-                {activeView === 'create-new-image' && <CreateNewImage />}
-            </div>
+            <div className="app-child-wrapper">{view}</div>
         </div>
     );
 }
