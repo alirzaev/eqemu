@@ -5,7 +5,7 @@ import { useStore } from 'react-redux';
 import { VM_EXPORT_CONFIG_VALUE } from '../../ipc/signals';
 import { RootState } from '../../store';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setSystemInfo } from '../../store/slices/system';
+import { loadSystemInfo } from '../../store/slices/system';
 import { setVmConfig } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
 import { parseVmConfig } from '../../utils';
@@ -21,7 +21,7 @@ export function App() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        electron.system.getInfo().then(info => dispatch(setSystemInfo(info)));
+        dispatch(loadSystemInfo());
 
         electron.vmConfig.onExportConfig(async event => {
             const { vm } = getState();

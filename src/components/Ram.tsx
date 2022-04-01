@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setMemory } from '../store/slices/vm';
 
 export function Ram() {
-    const system = useAppSelector(state => state.system);
+    const maxMemory = useAppSelector(state => state.system.info.memory);
     const memory = useAppSelector(state => state.vm.memory);
     const dispatch = useAppDispatch();
 
@@ -22,7 +22,7 @@ export function Ram() {
                     value={memory}
                     onChange={event => dispatch(setMemory(Number.parseInt(event.target.value)))}
                     min={MIN_RAM_SIZE}
-                    max={system.memory}
+                    max={maxMemory}
                 />
                 <span className="input-group-text">GiB</span>
             </div>

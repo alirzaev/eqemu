@@ -29,7 +29,7 @@ export function VmLauncher() {
     const system = useAppSelector(state => state.system);
 
     const delimeter = getShellMultilineDelimeter(shell);
-    const qemuArgs = buildQemuCmdArgs(config, system);
+    const qemuArgs = buildQemuCmdArgs(config, system.info);
     const script = qemuArgs.join(` ${delimeter}\n`);
 
     const copyToClipboard = () => {
