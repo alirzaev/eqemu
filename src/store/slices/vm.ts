@@ -37,8 +37,6 @@ const initialState: VmState = {
     spiceServer: {
         enabled: false,
         port: 3000,
-        ticketing: false,
-        password: '',
         usbRedirection: false,
     },
 };
@@ -102,12 +100,6 @@ export const vmSlice = createSlice({
         setSpiceServerPort: (state: VmState, action: PayloadAction<number>) => {
             state.spiceServer.port = action.payload;
         },
-        setSpiceServerTicketing: (state: VmState, action: PayloadAction<boolean>) => {
-            state.spiceServer.ticketing = action.payload;
-        },
-        setSpiceServerPassword: (state: VmState, action: PayloadAction<string>) => {
-            state.spiceServer.password = action.payload;
-        },
         setSpiceServerUsbRedirection: (state: VmState, action: PayloadAction<boolean>) => {
             state.spiceServer.usbRedirection = action.payload;
         },
@@ -159,8 +151,6 @@ export const {
     setSpiceAgentEnabled,
     setSpiceServerEnabled,
     setSpiceServerPort,
-    setSpiceServerTicketing,
-    setSpiceServerPassword,
     setSpiceServerUsbRedirection,
     setVmConfig,
 } = vmSlice.actions;
