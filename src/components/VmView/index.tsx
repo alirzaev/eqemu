@@ -6,7 +6,7 @@ import { VmLauncher } from '../VmLauncher';
 
 import './index.css';
 
-export function Main() {
+export function VmView() {
     return (
         <HorizontalLayout even={true}>
             <VmConfig />

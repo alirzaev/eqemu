@@ -77,7 +77,7 @@ export function CreateNewImage() {
             if (ok) {
                 setStatus('ready');
                 dispatch(setHardDrivePath(path));
-                dispatch(setWindowActiveView('main'));
+                dispatch(setWindowActiveView('vm-view'));
             } else {
                 setStatus('failed');
             }
@@ -182,7 +182,7 @@ export function CreateNewImage() {
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => dispatch(setWindowActiveView('main'))}
+                    onClick={() => dispatch(setWindowActiveView('vm-view'))}
                     disabled={isPending}
                 >
                     Cancel

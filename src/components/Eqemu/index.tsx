@@ -10,7 +10,7 @@ import { setVmConfig } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
 import { parseVmConfig } from '../../utils';
 import { CreateNewImage } from '../CreateNewImage';
-import { Main } from '../Main';
+import { VmView } from '../VmView';
 import { Settings } from '../Settings';
 
 import './index.css';
@@ -38,7 +38,7 @@ export function Eqemu() {
                 });
             } else {
                 dispatch(setVmConfig(config));
-                dispatch(setWindowActiveView('main'));
+                dispatch(setWindowActiveView('vm-view'));
             }
         });
 
@@ -56,9 +56,9 @@ export function Eqemu() {
         case 'settings':
             view = <Settings />;
             break;
-        case 'main':
+        case 'vm-view':
         default:
-            view = <Main />;
+            view = <VmView />;
             break;
     }
 

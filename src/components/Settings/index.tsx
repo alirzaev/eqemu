@@ -86,7 +86,7 @@ export function Settings() {
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => dispatch(setWindowActiveView('main'))}
+                    onClick={() => dispatch(setWindowActiveView('vm-view'))}
                 >
                     Close
                 </button>
