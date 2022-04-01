@@ -4,7 +4,7 @@ import { extname } from 'path';
 import { useAppDispatch } from '../../store/hooks';
 import { setHardDrivePath } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
-import { DiskImageFormat } from '../../enums';
+import { DiskImageFormat, View } from '../../enums';
 import { MAX_NEW_IMAGE_SIZE, MIN_NEW_IMAGE_SIZE } from '../../consts/newImage';
 import { getImageFileFormat } from '../../utils';
 
@@ -77,7 +77,7 @@ export function CreateNewImage() {
             if (ok) {
                 setStatus('ready');
                 dispatch(setHardDrivePath(path));
-                dispatch(setWindowActiveView('vm-view'));
+                dispatch(setWindowActiveView(View.VM_VIEW));
             } else {
                 setStatus('failed');
             }
@@ -182,7 +182,7 @@ export function CreateNewImage() {
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => dispatch(setWindowActiveView('vm-view'))}
+                    onClick={() => dispatch(setWindowActiveView(View.VM_VIEW))}
                     disabled={isPending}
                 >
                     Cancel

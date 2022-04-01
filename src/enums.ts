@@ -40,3 +40,9 @@ export enum NetworkCard {
     VIRTIO = 'virtio-net-pci',
     E1000E = 'e1000e',
 }
+
+export enum View {
+    VM_VIEW = 'vm-view',
+    SETTINGS = 'settings',
+    CREATE_NEW_IMAGE = 'create-new-image',
+}

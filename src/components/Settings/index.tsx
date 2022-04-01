@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 
 import { QEMU_IMG, QEMU_SYSTEM_X86_64 } from '../../consts/system';
+import { View } from '../../enums';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { loadSettings, setQemuPath } from '../../store/slices/settings';
 import { setWindowActiveView } from '../../store/slices/window';
@@ -86,7 +87,7 @@ export function Settings() {
                 <button
                     type="button"
                     className="btn btn-sm btn-outline-danger"
-                    onClick={() => dispatch(setWindowActiveView('vm-view'))}
+                    onClick={() => dispatch(setWindowActiveView(View.VM_VIEW))}
                 >
                     Close
                 </button>

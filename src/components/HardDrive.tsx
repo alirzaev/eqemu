@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { View } from '../enums';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setHardDriveEnabled, setHardDrivePath } from '../store/slices/vm';
 import { setWindowActiveView } from '../store/slices/window';
@@ -58,7 +59,7 @@ export function HardDrive() {
                         <a
                             className="dropdown-item"
                             href="#"
-                            onClick={() => dispatch(setWindowActiveView('create-new-image'))}
+                            onClick={() => dispatch(setWindowActiveView(View.CREATE_NEW_IMAGE))}
                         >
                             New
                         </a>

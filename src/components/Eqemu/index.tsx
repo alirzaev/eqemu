@@ -9,6 +9,7 @@ import { loadSystemInfo } from '../../store/slices/system';
 import { setVmConfig } from '../../store/slices/vm';
 import { setWindowActiveView } from '../../store/slices/window';
 import { parseVmConfig } from '../../utils';
+import { View } from '../../enums';
 import { CreateNewImage } from '../CreateNewImage';
 import { VmView } from '../VmView';
 import { Settings } from '../Settings';
@@ -38,12 +39,12 @@ export function Eqemu() {
                 });
             } else {
                 dispatch(setVmConfig(config));
-                dispatch(setWindowActiveView('vm-view'));
+                dispatch(setWindowActiveView(View.VM_VIEW));
             }
         });
 
         electron.settings.onOpenSettings(async () => {
-            dispatch(setWindowActiveView('settings'));
+            dispatch(setWindowActiveView(View.SETTINGS));
         });
     }, []);
 

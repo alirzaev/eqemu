@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-type ActiveView = 'vm-view' | 'settings' | 'create-new-image';
+import { View } from '../../enums';
 
 interface WindowState {
-    activeView: ActiveView;
+    activeView: View;
 }
 
 const initialState: WindowState = {
-    activeView: 'vm-view',
+    activeView: View.VM_VIEW,
 };
 
 export const windowsSlice = createSlice({
     name: 'window',
     initialState,
     reducers: {
-        setWindowActiveView: (state: WindowState, action: PayloadAction<ActiveView>) => {
+        setWindowActiveView: (state: WindowState, action: PayloadAction<View>) => {
             state.activeView = action.payload;
         },
     },
