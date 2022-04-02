@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'react';
 import { extname } from 'path';
 
 import { QEMU_SYSTEM_X86_64 } from './consts/system';
@@ -130,4 +131,10 @@ export function parseVmConfig(data: string): VmConfig | null {
     } catch (e) {
         return null;
     }
+}
+
+export const SystemInfoContext = createContext<SystemInfo>({ platform: 'win32', cpus: 1, memory: 1 });
+
+export function useSystemInfo() {
+    return useContext(SystemInfoContext);
 }

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { HTMLOption } from '../../types';
 import { Shell } from '../../enums';
 import { useAppSelector } from '../../store/hooks';
-import { buildQemuCmdArgs, getShellMultilineDelimeter } from '../../utils';
+import { buildQemuCmdArgs, getShellMultilineDelimeter, useSystemInfo } from '../../utils';
 
 import './index.css';
 
@@ -26,10 +26,10 @@ const ShellList: Array<HTMLOption<Shell>> = [
 export function VmLauncher() {
     const [shell, setShell] = useState(Shell.CMD);
     const config = useAppSelector(state => state.vm);
-    const system = useAppSelector(state => state.system);
+    const system = useSystemInfo();
 
     const delimeter = getShellMultilineDelimeter(shell);
-    const qemuArgs = buildQemuCmdArgs(config, system.info);
+    const qemuArgs = buildQemuCmdArgs(config, system);
     const script = qemuArgs.join(` ${delimeter}\n`);
 
     const copyToClipboard = () => {

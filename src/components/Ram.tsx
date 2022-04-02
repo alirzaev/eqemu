@@ -3,9 +3,10 @@ import * as React from 'react';
 import { MIN_RAM_SIZE } from '../consts/vm';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setMemory } from '../store/slices/vm';
+import { useSystemInfo } from '../utils';
 
 export function Ram() {
-    const maxMemory = useAppSelector(state => state.system.info.memory);
+    const { memory: maxMemory } = useSystemInfo();
     const memory = useAppSelector(state => state.vm.memory);
     const dispatch = useAppDispatch();
 

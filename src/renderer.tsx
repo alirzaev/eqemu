@@ -10,9 +10,15 @@ import { store } from './store';
 
 import './index.css';
 
-ReactDOM.render(
-    <Provider store={store}>
-        <Eqemu />
-    </Provider>,
-    document.querySelector('#eqemu')
-);
+function main() {
+    electron.system.getInfo().then(info => {
+        ReactDOM.render(
+            <Provider store={store}>
+                <Eqemu systemInfo={info} />
+            </Provider>,
+            document.querySelector('#eqemu')
+        );
+    });
+}
+
+main();
