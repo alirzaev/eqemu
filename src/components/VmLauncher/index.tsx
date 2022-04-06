@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { HTMLOption } from '../../types';
 import { Shell } from '../../enums';
+import { QEMU_SYSTEM_X86_64 } from '../../consts/system';
 import { useAppSelector } from '../../store/hooks';
 import { buildQemuCmdArgs, getShellMultilineDelimeter, useSystemInfo } from '../../utils';
 
@@ -26,11 +27,13 @@ const ShellList: Array<HTMLOption<Shell>> = [
 export function VmLauncher() {
     const [shell, setShell] = useState(Shell.CMD);
     const config = useAppSelector(state => state.vm);
+    const qemuPath = useAppSelector(state => state.settings.qemu.path);
     const system = useSystemInfo();
 
     const delimeter = getShellMultilineDelimeter(shell);
     const qemuArgs = buildQemuCmdArgs(config, system);
-    const script = qemuArgs.join(` ${delimeter}\n`);
+    const qemuExe = electron.path.join(qemuPath, QEMU_SYSTEM_X86_64);
+    const script = [shell === Shell.POWERSHELL ? `&"${qemuExe}"` : `"${qemuExe}"`, ...qemuArgs].join(` ${delimeter}\n`);
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(script);

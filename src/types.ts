@@ -1,4 +1,5 @@
 import type { ExecFileException } from 'child_process';
+import type { PlatformPath } from 'path';
 import * as rt from 'runtypes';
 
 import { MAX_CPU_CORES_COUNT, MAX_SPICE_SERVER_PORT, MIN_CPU_CORES_COUNT, MIN_SPICE_SERVER_PORT } from './consts/vm';
@@ -33,6 +34,7 @@ export interface ElectronBridge {
         showSaveDialog: (dialogOption: Electron.SaveDialogOptions) => Promise<Electron.SaveDialogReturnValue>;
         showMessageBox: (messageBoxOptions: Electron.MessageBoxOptions) => Promise<Electron.MessageBoxReturnValue>;
     };
+    path: PlatformPath;
 }
 
 function RuntypeEnum<E>(e: Record<string, E>): rt.Runtype<E> {

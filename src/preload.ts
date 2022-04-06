@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron';
+import * as path from 'path';
 
 import {
     VM_EXPORT_CONFIG,
@@ -63,4 +64,5 @@ contextBridge.exposeInMainWorld('electron', {
             return ipcRenderer.invoke(DIALOG_SHOW_MESSAGE_BOX, messageBoxOptions);
         },
     },
+    path: path,
 } as ElectronBridge);

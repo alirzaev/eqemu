@@ -7,11 +7,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Eqemu } from './components/Eqemu';
 import { store } from './store';
+import { loadSettings } from './store/slices/settings';
 
 import './index.css';
 
 function main() {
-    electron.system.getInfo().then(info => {
+    Promise.all([electron.system.getInfo(), store.dispatch(loadSettings())]).then(([info]) => {
         ReactDOM.render(
             <Provider store={store}>
                 <Eqemu systemInfo={info} />

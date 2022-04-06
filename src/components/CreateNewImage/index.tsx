@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { extname } from 'path';
 
 import { useAppDispatch } from '../../store/hooks';
 import { setHardDrivePath } from '../../store/slices/vm';
@@ -55,7 +54,7 @@ export function CreateNewImage() {
         if (!result.canceled && result.filePath) {
             let newPath = result.filePath;
 
-            newPath = extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCOW2}` : newPath;
+            newPath = electron.path.extname(newPath) === '' ? `${newPath}.${DiskImageFormat.QCOW2}` : newPath;
             setPath(newPath);
         }
     };

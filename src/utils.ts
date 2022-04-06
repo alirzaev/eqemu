@@ -1,13 +1,10 @@
 import { createContext, useContext } from 'react';
-import { extname } from 'path';
 
-import { QEMU_SYSTEM_X86_64 } from './consts/system';
 import { AudioDevice, Chipset, DiskImageFormat, NetworkCard, Shell } from './enums';
 import { SystemInfo, VmConfig, VmConfigRuntype } from './types';
 
 export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[] {
     const params = [
-        QEMU_SYSTEM_X86_64,
         `-machine ${config.chipset}`,
         `-smp ${config.cpu.cores}`,
         `-m ${config.memory}G`,
@@ -86,7 +83,7 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
 }
 
 export function getImageFileFormat(path: string): DiskImageFormat {
-    const extension = extname(path).slice(1);
+    const extension = electron.path.extname(path).slice(1);
 
     switch (extension) {
         case 'qcow2':
