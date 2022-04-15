@@ -52,16 +52,23 @@ export function buildQemuCmdArgs(config: VmConfig, system: SystemInfo): string[]
         }
     }
 
+    if (config.spiceAgent.enabled || config.spiceServer.enabled) {
+        params.push('-device virtio-serial');
+    }
+
     if (config.spiceAgent.enabled) {
         params.push(
-            '-device virtio-serial',
             '-chardev spicevmc,id=vdagent,debug=0,name=vdagent',
             '-device virtserialport,chardev=vdagent,name=com.redhat.spice.0'
         );
     }
 
     if (config.spiceServer.enabled) {
-        params.push(`-spice port=${config.spiceServer.port},disable-ticketing=on`);
+        params.push(
+            `-spice port=${config.spiceServer.port},disable-ticketing=on`,
+            '-chardev spiceport,name=org.spice-space.webdav.0,id=charchannel1',
+            '-device virtserialport,chardev=charchannel1,id=channel1,name=org.spice-space.webdav.0'
+        );
 
         if (config.spiceServer.usbRedirection) {
             params.push(
